@@ -5,7 +5,7 @@ author: "Benjamin Louis"
 date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
 output:
   xaringan::moon_reader:
-    css: [default, default-fonts, static/css/custom.css]
+    css: [default, default-fonts, /static/css/custom.css]
     lib_dir: libs
     nature:
       highlightStyle: agate
@@ -15,7 +15,7 @@ output:
 
 class: inverse, center, middle
 
-<img src="img/Rlogo.svg" width="200">
+<img src="/static/img/Rlogo.svg" width="200">
 
 ```{r setup, echo = FALSE}
 library(magrittr)
@@ -76,7 +76,7 @@ library(kableExtra)
 ---
 class: inverse, center, middle
 
-<img src="img/RStudio-Logo.svg" width="400">
+<img src="/static/img/RStudio-Logo.svg" width="400">
 
 
 ---
@@ -92,67 +92,9 @@ class: inverse, center, middle
 + Téléchargement :  [http://www.rstudio.com](http://www.rstudio.com)
 
 .center[
-<img src="img/rstudio.png" width="400">
+<img src="/static/img/rstudio.png" width="400">
 ]
 
-
----
-
-class: inverse, center, middle
-
-# R, une programmation orientée objet
-
-
----
-
-# Opérateur arithmétique
-
-```{r echo = FALSE}
-data.frame(
-  Operateur = c("+", "-", "*", "/", "^ ou **", "%%", "%/%", "%*%"),
-  Description = c("Addition", "Soustraction", "Multiplication", "Division", "Exponentiation", "Modulo", "Division entière", "Multiplication de matrice")
-) %>% 
-  kable(format = "html", col.names = c("Opérateur", "Description")) %>% 
-  kable_styling()
-```
-
-```{r results = "hold"}
-2 + 3
-5 / 2
-5 %/% 2
-5 %% 2
-```
-
-
----
-
-# Orientée objet<sup>*</sup>
-
-__objet__ : structure de données auquelle est attachée une classe. 
-
-__classe__ : définit le comportement d'un objet en décrivant ses attributs et relations avec les autres classes.
-
-__méthodes__ : fonctions qui vont agir différemment selon la classe de l'objet.
-
-
-
-```{r echo = FALSE}
-data.frame(
-  x = c("1d", "2d", "nd"),
-  Homogene = c("Atomic Vector", "Matrix", "Array"),
-  Heterogene = c("List", "Data Frame", "")
-) %>% 
-  kable(format = "html", col.names = c("", "Homogène", "Hétérogène")) %>% 
-  kable_styling()
-```
-
-
-La fonction `str()` donne la structure d'un objet et la fonction `class()` donne sa classe.
-
-
-.footnote[
-[*] [https://adv-r.hadley.nz/](https://adv-r.hadley.nz/)
-]
 
 ---
 
@@ -179,94 +121,30 @@ Ou en regardant l'onglet _Environment_ dans RStudio.
 
 ---
 
-# Vecteurs : _Atomic_
+# Projet RStudio
 
-#### Construction
+#### _Working directory_
 
-Éléments de même type, construit avec `c()`
-
-```{r}
-vec1 <- c(1L, 2L, 3L) #ou 1:3
-vec2 <- c(1.2, 5/8, 3*2, 2^3)
-vec3 <- c(TRUE, FALSE, FALSE)
-vec4 <- c("a", "c", "d")
-```
-
-Fonctions utiles : `typeof()`, `length()`, `names()`
-
-Les types principaux sont : `logical` < `integer` < `double` < `character` 
-
-#### Sous-ensemble
-
-```{r results = "hold"}
-vec1[1]
-vec3[2:3]
-```
-
----
-
-# Vecteurs : _List_
-
-#### Construction
-
-Éléments de type différent possible, construit avec `list()`
++ R comprend la notion de dossier de travail où il va chercher/sauvegarder des fichiers.
 
 ```{r}
-li <- list(vec1, vec2, c = vec3)
-li <- list(a = vec1, b = list(vec2, vec3))
+getwd()
 ```
 
-Fonctions utiles : `str()`, `length()`, `unlist()`, `is.recursive()`, `names()`
++ Chemins d'accès dépendent du système d'exploitation, de l'organisation des dossiers, ...
 
-#### Sous-ensemble
+#### vs _RStudio project_ 
+ 
++ Construction d'espaces de travail portables et partageables
 
-```{r}
-li[1]
-li[[1]] # ou li$a
-```
++ Premier pas vers la reproductibilité !
+
+.center[
+`File --> New project`
+]
 
 
 ---
 
-# Matrice
+# 
 
-
-#### Construction
-
-Éléments de même type, construit avec `matrix()`
-
-```{r}
-m1 <- matrix(1:20, nrow = 4, ncol = 5, byrow = FALSE)
-```
-
-Fonctions utiles : `dim()`, `nrow()`, `ncol()`, `rownames()`, `colnames()`
-
-
-#### Sous-ensemble
-
-```{r results = "hold"}
-m1[1,] #1ere colonne
-m1[,2] #2eme colonne
-m1[1,2] #valeur de la 1ere ligne et 2eme colonne
-```
-
----
-
-# Data Frame
-
-
----
-
-class: inverse
-
-# Exercices sur console
-
-j
-
---- 
-
-# Conditions
-
---- 
-
-# Fonctions
