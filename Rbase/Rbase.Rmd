@@ -1,6 +1,6 @@
 ---
-title: "R, RStudio et workflow"
-subtitle: "ou comment bien commencer son travail d'analyse"
+title: "R base"
+subtitle: "programmation orientée objet"
 author: "Benjamin Louis"
 date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
 output:
@@ -22,107 +22,6 @@ library(magrittr)
 library(knitr)
 library(kableExtra)
 ```
-
----
-
-# C'est quoi R ?
-
-+ Langage de programmation et environnement intégré pour la science des données
-
-+ Développé dans les années 90 par Ross Ihaka et Robert Genleman
-
-+ Depui 1997 : _R-core team_ (internationale)
-
-+ Logiciel libre et gratuit (_licence GNU GPL_)
-
-+ Langage interprété exécutable pas à pas (ligne de code)
-
-+ Version : 3.6.1 (05/07/2019)
-
-+ Téléchargement sur le CRAN : [https://cran.r-project.org/](https://cran.r-project.org/)
-
-
----
-
-
-.pull-left[
-
-# Forces
-
-+ Libre et gratuit
-
-+ Multiplateforme
-
-+ Manipulation et visualisation de données
-
-+ _On vient pour le langage, on reste pour la communauté !_
-
-+ $>10000$ packages (ensemble de fonction)
-
-+ Couplage : SQL, WinBUGS, QGis, Excel, ...
-]
-
-.pull-right[
-
-#Faiblesses
-
-+ Difficile à apprendre
-
-+ Gestion de la mémoire (de moins en moins vrai)
-
-+ Interface de base minimale
-]
-
----
-class: inverse, center, middle
-
-<img src="img/RStudio-Logo.svg" width="400">
-
-
----
-
-# RStudio
-
-+ Entreprise fondé par J.J. Allaire en 2009 
-
-+ Création de produits libres (et gratuits) ainsi que des services
-
-+ 2011 : RStdio IDE, interface utilisateur ergonomique, configurable et intégrant de nombreux outils utils
-
-+ Téléchargement :  [http://www.rstudio.com](http://www.rstudio.com)
-
-.center[
-<img src="img/rstudio.png" width="400">
-]
-
-
----
-
-class: inverse, center, middle
-
-# R, une programmation orientée objet
-
-
----
-
-# Opérateur arithmétique
-
-```{r echo = FALSE}
-data.frame(
-  Operateur = c("+", "-", "*", "/", "^ ou **", "%%", "%/%", "%*%"),
-  Description = c("Addition", "Soustraction", "Multiplication", "Division", "Exponentiation", "Modulo", "Division entière", "Multiplication de matrice")
-) %>% 
-  kable(format = "html", col.names = c("Opérateur", "Description")) %>% 
-  kable_styling()
-```
-
-```{r results = "hold"}
-2 + 3
-5 / 2
-5 %/% 2
-5 %% 2
-```
-
 
 ---
 
@@ -154,28 +53,27 @@ La fonction `str()` donne la structure d'un objet et la fonction `class()` donne
 [*] [https://adv-r.hadley.nz/](https://adv-r.hadley.nz/)
 ]
 
+
 ---
 
-# Session, environnement et assignation
+# Opérateur arithmétique
 
-Une session de travail R commence à l’ouverture de R/RStudio et se termine à sa fermeture.
-
-on __assigne__ un nom à des objets ou des valeurs à l'aide de `<-`
-
-```{r}
-ma_variable1 <- 1
-ma_variable2 <- "Hello"
-ma_variable3 <- TRUE
-ma_variable4 <- 2/3
+```{r echo = FALSE}
+data.frame(
+  Operateur = c("+", "-", "*", "/", "^ ou **", "%%", "%/%", "%*%"),
+  Description = c("Addition", "Soustraction", "Multiplication", "Division", "Exponentiation", "Modulo", "Division entière", "Multiplication de matrice")
+) %>% 
+  kable(format = "html", col.names = c("Opérateur", "Description")) %>% 
+  kable_styling()
 ```
 
-On peut lister les objets crées avec la fonction `ls()`
-
-```{r}
-ls()
+```{r results = "hold"}
+2 + 3
+5 / 2
+5 %/% 2
+5 %% 2
 ```
 
-Ou en regardant l'onglet _Environment_ dans RStudio.
 
 ---
 
