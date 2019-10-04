@@ -51,3 +51,11 @@ th, td {
   vertical-align: top;
   /*border-bottom: 1px solid black;*/
 }
+
+/* MY CLASS */
+/* -------- */
+
+.tree {
+  background-color: #002240;
+  color: #FFFFFF;
+}
