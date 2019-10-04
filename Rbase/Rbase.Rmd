@@ -1,0 +1,272 @@
+---
+title: "R, RStudio et workflow"
+subtitle: "ou comment bien commencer son travail d'analyse"
+author: "Benjamin Louis"
+date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
+output:
+  xaringan::moon_reader:
+    css: [default, default-fonts, static/css/custom.css]
+    lib_dir: libs
+    nature:
+      highlightStyle: agate
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+class: inverse, center, middle
+
+<img src="img/Rlogo.svg" width="200">
+
+```{r setup, echo = FALSE}
+library(magrittr)
+library(knitr)
+library(kableExtra)
+```
+
+---
+
+# C'est quoi R ?
+
++ Langage de programmation et environnement intégré pour la science des données
+
++ Développé dans les années 90 par Ross Ihaka et Robert Genleman
+
++ Depui 1997 : _R-core team_ (internationale)
+
++ Logiciel libre et gratuit (_licence GNU GPL_)
+
++ Langage interprété exécutable pas à pas (ligne de code)
+
++ Version : 3.6.1 (05/07/2019)
+
++ Téléchargement sur le CRAN : [https://cran.r-project.org/](https://cran.r-project.org/)
+
+
+---
+
+
+.pull-left[
+
+# Forces
+
++ Libre et gratuit
+
++ Multiplateforme
+
++ Manipulation et visualisation de données
+
++ _On vient pour le langage, on reste pour la communauté !_
+
++ $>10000$ packages (ensemble de fonction)
+
++ Couplage : SQL, WinBUGS, QGis, Excel, ...
+]
+
+.pull-right[
+
+#Faiblesses
+
++ Difficile à apprendre
+
++ Gestion de la mémoire (de moins en moins vrai)
+
++ Interface de base minimale
+]
+
+---
+class: inverse, center, middle
+
+<img src="img/RStudio-Logo.svg" width="400">
+
+
+---
+
+# RStudio
+
++ Entreprise fondé par J.J. Allaire en 2009 
+
++ Création de produits libres (et gratuits) ainsi que des services
+
++ 2011 : RStdio IDE, interface utilisateur ergonomique, configurable et intégrant de nombreux outils utils
+
++ Téléchargement :  [http://www.rstudio.com](http://www.rstudio.com)
+
+.center[
+<img src="img/rstudio.png" width="400">
+]
+
+
+---
+
+class: inverse, center, middle
+
+# R, une programmation orientée objet
+
+
+---
+
+# Opérateur arithmétique
+
+```{r echo = FALSE}
+data.frame(
+  Operateur = c("+", "-", "*", "/", "^ ou **", "%%", "%/%", "%*%"),
+  Description = c("Addition", "Soustraction", "Multiplication", "Division", "Exponentiation", "Modulo", "Division entière", "Multiplication de matrice")
+) %>% 
+  kable(format = "html", col.names = c("Opérateur", "Description")) %>% 
+  kable_styling()
+```
+
+```{r results = "hold"}
+2 + 3
+5 / 2
+5 %/% 2
+5 %% 2
+```
+
+
+---
+
+# Orientée objet<sup>*</sup>
+
+__objet__ : structure de données auquelle est attachée une classe. 
+
+__classe__ : définit le comportement d'un objet en décrivant ses attributs et relations avec les autres classes.
+
+__méthodes__ : fonctions qui vont agir différemment selon la classe de l'objet.
+
+
+
+```{r echo = FALSE}
+data.frame(
+  x = c("1d", "2d", "nd"),
+  Homogene = c("Atomic Vector", "Matrix", "Array"),
+  Heterogene = c("List", "Data Frame", "")
+) %>% 
+  kable(format = "html", col.names = c("", "Homogène", "Hétérogène")) %>% 
+  kable_styling()
+```
+
+
+La fonction `str()` donne la structure d'un objet et la fonction `class()` donne sa classe.
+
+
+.footnote[
+[*] [https://adv-r.hadley.nz/](https://adv-r.hadley.nz/)
+]
+
+---
+
+# Session, environnement et assignation
+
+Une session de travail R commence à l’ouverture de R/RStudio et se termine à sa fermeture.
+
+on __assigne__ un nom à des objets ou des valeurs à l'aide de `<-`
+
+```{r}
+ma_variable1 <- 1
+ma_variable2 <- "Hello"
+ma_variable3 <- TRUE
+ma_variable4 <- 2/3
+```
+
+On peut lister les objets crées avec la fonction `ls()`
+
+```{r}
+ls()
+```
+
+Ou en regardant l'onglet _Environment_ dans RStudio.
+
+---
+
+# Vecteurs : _Atomic_
+
+#### Construction
+
+Éléments de même type, construit avec `c()`
+
+```{r}
+vec1 <- c(1L, 2L, 3L) #ou 1:3
+vec2 <- c(1.2, 5/8, 3*2, 2^3)
+vec3 <- c(TRUE, FALSE, FALSE)
+vec4 <- c("a", "c", "d")
+```
+
+Fonctions utiles : `typeof()`, `length()`, `names()`
+
+Les types principaux sont : `logical` < `integer` < `double` < `character` 
+
+#### Sous-ensemble
+
+```{r results = "hold"}
+vec1[1]
+vec3[2:3]
+```
+
+---
+
+# Vecteurs : _List_
+
+#### Construction
+
+Éléments de type différent possible, construit avec `list()`
+
+```{r}
+li <- list(vec1, vec2, c = vec3)
+li <- list(a = vec1, b = list(vec2, vec3))
+```
+
+Fonctions utiles : `str()`, `length()`, `unlist()`, `is.recursive()`, `names()`
+
+#### Sous-ensemble
+
+```{r}
+li[1]
+li[[1]] # ou li$a
+```
+
+
+---
+
+# Matrice
+
+
+#### Construction
+
+Éléments de même type, construit avec `matrix()`
+
+```{r}
+m1 <- matrix(1:20, nrow = 4, ncol = 5, byrow = FALSE)
+```
+
+Fonctions utiles : `dim()`, `nrow()`, `ncol()`, `rownames()`, `colnames()`
+
+
+#### Sous-ensemble
+
+```{r results = "hold"}
+m1[1,] #1ere colonne
+m1[,2] #2eme colonne
+m1[1,2] #valeur de la 1ere ligne et 2eme colonne
+```
+
+---
+
+# Data Frame
+
+
+---
+
+class: inverse
+
+# Exercices sur console
+
+j
+
+--- 
+
+# Conditions
+
+--- 
+
+# Fonctions
