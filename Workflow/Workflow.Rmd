@@ -146,5 +146,10 @@ getwd()
 
 ---
 
-# 
+# Organiser son projet
+
+
+```{r echo = FALSE}
+fs::dir_tree(here::here("static/mon_projet"))
+```
 
