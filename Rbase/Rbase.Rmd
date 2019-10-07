@@ -5,7 +5,7 @@ author: "Benjamin Louis"
 date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
 output:
   xaringan::moon_reader:
-    css: [default, default-fonts, static/css/custom.css]
+    css: [default, default-fonts, "../static/css/custom.css"]
     lib_dir: libs
     nature:
       highlightStyle: agate
@@ -15,7 +15,7 @@ output:
 
 class: inverse, center, middle
 
-<img src="img/Rlogo.svg" width="200">
+<img src="../static/img/Rlogo.svg" width="200">
 
 ```{r setup, echo = FALSE}
 library(magrittr)
@@ -74,6 +74,53 @@ data.frame(
 5 %% 2
 ```
 
+---
+
+# Fonctions
+
++ Des fonctions permettent d'appliquer des méthodes à des objets
+
++ Utilisation `ma_fonction(arg1, arg2)`
+
++ Exemple :
+
+```{r}
+sum(1:5)
+```
+
++ Pour voir l'aide d'une fonction :
+
+```{r eval = FALSE}
+?sum #ou help(sum)
+```
+
+---
+
+# Packages
+
++ Un package est un groupement de fonctions documentées autour d'une thématique
+
++ Packages natifs de R : `base`,  `utils`, `stats`
+
+```{r eval = FALSE}
+# Installation de nouveau package depuis le CRAN
+install.packages("nom_du_package")
+#Charger un package installé non natif
+library(nom_du_package)
+```
+
++ [https://cran.r-project.org/web/packages/available_packages_by_name.html](https://cran.r-project.org/web/packages/available_packages_by_name.html)
+
++ Autres sources :
+
+  + __Bioconductor__ : [https://www.bioconductor.org/](https://www.bioconductor.org/)
+  
+  + __Github__ : [https://github.com/](https://github.com/)
+
+---
+class: inverse, center, middle
+
+# Structure des données
 
 ---
 
@@ -101,6 +148,27 @@ vec1[1]
 vec3[2:3]
 ```
 
+---
+
+# _Factors_
+
+
+Vecteurs qui ne peuvent prendre que certaines valeurs pré-déterminées
+
+```{r}
+fac1 <- factor(c("a", "a", "b", "b", "c", "c"))
+fac1
+```
+
+On peut préciser les valeurs pré-determinées (_levels_)
+
+```{r}
+fac2 <- factor(c("a", "a", "b", "b", "c", "c"), 
+               levels = c("a", "b", "c", "d"))
+fac2
+```
+
+On peut transformer n'importe quel vecteur atomique en _factor_ avec `as.factor()`
 ---
 
 # Vecteurs : _List_
@@ -152,19 +220,241 @@ m1[1,2] #valeur de la 1ere ligne et 2eme colonne
 
 # Data Frame
 
+#### Construction
+
+Éléments de type différent, construit avec `data.frame()`
+
+```{r}
+df <- data.frame(x = 1:3, 
+                 y = c("a", "b", "c"), 
+                 stringsAsFactors = FALSE)
+```
+
+Fonctions utiles : `dim()`, `nrow()`, `ncol()`, `rownames()`, `colnames()`, `cbind()`, `rbind()`
+
+
+#### Sous-ensemble
+
+```{r eval = FALSE}
+# Comme les matrices
+df[1,] 
+# Les data.frame sont des listes organisées
+df$x
+df[[1]]
+df["x"]
+```
+
+
+---
+class: inverse
+
+# Exercices
+
++ Installer le package `cowplot`
+
++ Charger le package `cowplot`, regarder l'aide de la fonction `plot_grid` et essayer quelques exemples
+
++ Dans la console, essayer quelques opérations de base
+
++ Dans un script : 
+
+  + Créer 3 vecteurs (atomiques) : 1 numérique, 1 logique et 1 caractère
+  
+  + Faire différentes combinaisons des vecteurs 2 à 2 avec `c()` et observer le résultat. Que se passe t-il ?
+  
+  + À partir de ces vecteurs, créer une liste puis créer un data.frame
+  
+  + Donner comme nom au data.frame : _vecteur1_ (numérique), _vecteur2_ (logique), _vecteur3_ (caractère)
+  
+  + Appliquer la fonction `mean()` à chaque colonne du data.frame. Que se passe t-il ?
+
+---
+class: inverse, center, middle
+
+# Programmation
 
 ---
 
+# Opérateurs logiques (suite)
+
+```{r echo = FALSE}
+data.frame(
+  Operateur = c("==", "!=", "<", "<=", ">", ">=", "|", "&", "is.element(x, y)", "any", "all"),
+  Description = c("est égal à", "est différent de", "est strictement inférieur à", "est inférieur ou égal à", "est strictement supérieur à", "est supérieur ou égal à", "ou", "et", "les éléments de x sont éléments de y", "Il y a au moins un élément vrai", "Tous les éléments sont vrais")
+) %>% 
+  kable(format = "html", col.names = c("Opérateur", "Description")) %>% 
+  kable_styling()
+```
+
+---
+
+# Opérateurs logiques (suite)
+
+```{r echo = FALSE}
+data.frame(
+  x = c(TRUE, TRUE, FALSE, FALSE),
+  y = c(TRUE, FALSE, TRUE, FALSE),
+  xouy = c(TRUE, TRUE, TRUE, FALSE),
+  xety = c(TRUE, FALSE, FALSE, FALSE)
+) %>% 
+  kable(format = "html", col.names = c("x", "y", "x | y", "x & y")) %>% 
+  kable_styling()
+```
+
+```{r results = "hold"}
+x <- 2
+y <- 1
+x == 2
+y > 1
+x == 2 & y > 1
+x == 2 | y > 1
+any(c(x == 2, y > 1))
+all(c(x == 2, y > 1))
+```
+
+---
+
+# Déclaration `if`
+
++ Permet d'appliquer du code en fonction d'une condition.
+
+```{r}
+x <- 2
+if (x < 1) {
+  1 + 1
+} else if (x == 2) {
+  print("Hello")
+} else {
+  0 + 0
+}
+```
+
++ Les déclarations sont plus ou moins complexes :
+
+  + `if` seulement
+  + `if ... else`
+  + `if ... else if ... else`
+  + `if ... else if ... else if ... else`
+  
++ Les déclarations peuvent être imbriquées
+
+---
+
+# Boucles<sup>*</sup> `while`
+
++ Applique du code tant qu'une condition est remplie
+
+```{r results = "hold"}
+x <- 0
+while (x < 5) {
+  print("Non")
+  x <- x + 1
+}
+print("ok")
+```
+
+.footnote[
+<sup>*</sup>Les boucles `for` que l'on trouve dans d'autres langages sont à éviter (et peuvent souvent l'être) dans R  !
+]
+
+---
+class: inverse, middle, center
+
+# Programation fonctionnelle
+
+---
+
+# Écrire ses propres fonctions
+
++ Pour écrire ses propres fonctions, il existe la fonction `function()`
+
+```
+ma_function <- function(arg1, arg2, arg3 = valeur_defaut) {
+  #code qui utilise arg1, arg2 et arg3
+}
+```
+
++ Exemple
+
+```{r}
+somme <- function(x, y) { x + y }
+somme(x = 2, y = 5)
+```
+
+
+```{r}
+somme_et_multiplication <- function(x, y = 5) {
+  c(somme = x + y, multiplication = x * y)
+}
+somme_et_multiplication(x = 2)
+```
+
+---
 class: inverse
 
-# Exercices sur console
+# Exercices
 
-j
++ Écrire une fonction qui prend en entrée un vecteur et qui :
 
---- 
+  + renvoie la moyenne et l'écart-type si le vecteur est numérique
+  
+  + renvoie les éléments uniques si le vecteur est de type caractère (ou _factor_)
+  
+  + renvoie la proportion d'élément vraie si le vecteur est de type logique
+  
+  + renvoie une erreur sinon
+  
 
-# Conditions
++ Tester la fonction sur les vecteurs précédemment créés
 
---- 
+Fonctions utiles : `mean()`, `sd()`, `unique()`, `is.numeric()`, `is.factor()`, `is.charcater()`, `is.logical()`
 
-# Fonctions
+---
+
+# Solution
+
+```{r}
+summarize_vec <- function(x) {
+  # Si numérique
+  if (is.numeric(x)) {
+    c(moyenne = mean(x), ecart_type = sd(x))
+  # Si character ou factor  
+  } else if (is.character(x) | is.factor(x)) {
+    unique(x)
+  # Si logique  
+  } else if (is.logical(x)) {
+    mean(x)
+  # Sinon
+  } else {
+    stop("Erreur")
+  }
+}
+```
+
+---
+
+# Autre solution
+
+```{r}
+summarize_vec <- function(x) {
+  # Si numérique
+  if (is.numeric(x)) {
+    result <- c(moyenne = mean(x), ecart_type = sd(x))
+    cat("La moyenne est ", result[1], 
+        "\net l'écart-type est ", result[2], "\n")
+  # Si character ou factor  
+  } else if (is.character(x) | is.factor(x)) {
+    result <- unique(x)
+    cat("Les valeurs dans x sont : ", as.vector(result), "\n")
+  # Si logique  
+  } else if (is.logical(x)) {
+    result <- mean(x)
+    cat("La proportion d'élément vraie est de ", result, "\n")
+  # Sinon
+  } else {
+    stop("Erreur")
+  }
+  result
+}
+```
+
