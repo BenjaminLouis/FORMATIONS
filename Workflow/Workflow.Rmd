@@ -185,4 +185,84 @@ here("data-raw", "data-raw-processing.R")
 gsub(here(), "D:/[...]", here("static/mon_projet/data-raw", "data-raw-processing.R"))
 ```
 
+---
+
+# Conseil !
+
+.center[
+<img src="../static/img/nordata.jpg" width="500">
+]
+
+---
+
+# Raccourcis clavier
+
+.center[
+`Alt + Shift + K`
+]
+
+.center[
+<img src="../static/img/shortcuts.png" width="650">
+]
+
+
+---
+class: inverse, center, middle
+
+# Script R
+
+---
+
+# Script R
+
++ Permet d'enregistrer l'ensemble du code nécessaire pour mener une analyse
+
++ Console = expérimentation __vs__ Script = sauvegarde
+
++ Créer un nouveau script :
+
+.center[
+`File --> New file --> R Script` ou `Ctrl + Shift + N`
+]
+
++ Lancer la ligne de code active ou l'ensemble des lignes de code sélectionnées : `Ctrl + Enter`
+
++ Lancer l'ensemble du script : `Ctrl + Shift + S`
+
++ Ligne de commentaire commence par `#`
+
+---
+
+# Script R : quelques conseils
+
++ Commencer par une description sous forme de commentaire
+
++ Mettre l'ensemble des packages nécessaires en début de script
+
++ Ne jamais commencer par `rm(list = ls())` ni `setwd()` ([https://www.tidyverse.org/articles/2017/12/workflow-vs-script/](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/))
+
++ Utiliser des commentaires 
+
++ Attention aux scripts trop long : scinder l'analyse en plusieurs scripts (`source()`)
+
++ Utiliser un style cohérent ([http://stat405.had.co.nz/r-style.html](http://stat405.had.co.nz/r-style.html))
+
++ Éviter les copier-coller --> automatiser avec des fonctions !
+
++ Ne pas hésiter à confronter votre code à des collègues !
+
+---
+class: inverse
+
+# Exercices
+
++ Ouvrir une session R via RStudio
+
++ Créer un projet RStudio et lui donner un nom
+
++ Créer un premier script
+
++ Donner une description au script (e.g. _"Premier script d'exerice...."_)
+
++ Ne pas oublier de sauvergarder !!!
 
