@@ -12,3 +12,575 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+library(knitr)
+library(kableExtra)
+library(viridis)
+library(rlang)
+library(tidyr)
+library(dplyr)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+options(knitr.kable.NA = '')
+set.seed(777)
+```
+
+
+# Disclaimer !
+
+.big[
+Dans cette présentation :
+
+.center[
+
+Base de données $\neq$ SQL
+
+Base de données $=$ Tableau de données
+
+
+</br>
+</br>
+
+
+
+Beaucoup du contenu de cette présentation provient de : [https://thinkr.fr/base-de-donnees-reussie/](https://thinkr.fr/base-de-donnees-reussie/)
+
+by 
+
+<img src="../static/img/thinkr.png" width="200">
+]
+
+]
+
+---
+class: excel
+# Tableau de données, kezako ?
+
+
+```{r echo = FALSE}
+data.frame(
+  id = 1:7,
+  variable_1 = rep(NA, 7),
+  variable_2 = c(rep(NA, 2), 
+                 cell_spec("x", format = "html", background = cividis(3)[2], 
+                           color = "White", bold = TRUE, align = "center"), 
+                 rep(NA, 4)),
+  variable_3 = rep(NA, 7),
+  variable_4 = rep(NA, 7)
+) %>%
+  kable(format = "html", escape = FALSE, align = c("r", rep("c", 4))) %>% 
+  kable_styling() %>% 
+  column_spec(1, background = cividis(2)[2]) %>% 
+  column_spec(2:5) %>% 
+  row_spec(0, background = cividis(2)[1], color = "white")
+```
+
+
+.small[
+.row[Ligne] : 
++ __1 ligne = 1 observation/individu statistique__ (une personne, une parcelle, ...).
++ Si répétition --> 1 ligne par répétition. Il est toujours bon d'avoir une colonne avec un identifiant unique pour chaque observation.
+
+.column[Colonnes] : __1 colonne = 1 variable__ (caractéristique mesurable,e.g. sexe, age, rendement, ...)
+
+
+.donnee[x] : donnée = valeur de la variable pour une observation
+]
+
+.big[.center[UN SEUL TABLEAU !]]
+
+---
+class: excel, center
+
+## 1 colonne = 1 variable / 1 variable = 1 colonne
+
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+sexe <- data.frame(
+  id = 1:5,
+  sexe = sample(c("Homme", "Femme"), 5, replace = TRUE)
+) 
+sexe %>% 
+  mutate(val = "oui") %>% 
+  complete(id, sexe, fill = list(val = "non")) %>% 
+  spread(sexe, val) %>%
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+sexe %>%
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+] 
+
+---
+class: excel, center
+
+## 1 colonne = 1 variable et 1 variable = 1 colonne
+
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+sport <- data.frame(
+  id = 1:5,
+  type_sport = c("tennis; football", "escalade", NA, "aucun sport", "football; pétanque")
+)
+sport %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE, warning = FALSE}
+goodsport <- sport %>% 
+  separate(type_sport, into = c("sport1", "sport2"), sep =  "; ") %>% 
+  gather("key", "value", sport1:sport2) %>% 
+  arrange(id) %>% 
+  filter(!(key == "sport2" & is.na(value))) %>% 
+  mutate(val = "oui") %>% 
+  select(-key) %>% 
+  complete(id, value, fill = list(val = "non")) %>% 
+  group_by(id) %>% 
+  mutate(sport = if (all(val == "non")) { 
+    "non" 
+    } else if (val[is.na(value)] == "oui") { 
+      NA_character_
+    } else { 
+      "oui" 
+    }) %>% 
+  spread(value, val) %>% 
+  select(-matches("aucun sport"), -matches("<NA>")) %>% 
+  mutate_at(vars(-id, -sport), ~ifelse(is.na(sport), NA_character_, .)) 
+goodsport %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## 1 colonne = 1 variable et 1 variable = 1 colonne
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+goodsport %>% 
+  mutate_at(vars(-id,-sport), ~ifelse(. == "non", '', "x")) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+goodsport %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: inverse, middle, center
+
+# Bonnes pratiques
+
+---
+class: excel
+
+## Un seul en-tête !
+
+### .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+agro <- data.frame(
+  parcelle = 1:5,
+  repetition = 1,
+  type_sol = sample(letters[1:3], 5, replace = TRUE),
+  traitement = "T1",
+  temperature = sample(12:35, 5),
+  pluie = sample(0:200, 5),
+  matiere_seche = runif(5, 20, 50),
+  rendement = runif(5, 60, 90)
+)
+kable(agro, format = "html", escape = FALSE) %>% 
+  kable_styling() %>% 
+  add_header_above(c(" ", "Expérimentation" = 3, "Climat" = 2, "Mesure" = 2))
+```
+
+--
+
+### .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+agro %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+
+
+---
+class: excel, center
+
+## Variable qualitative $\neq$ variable quantitative
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+sexe %>% 
+  mutate(sexe = ifelse(sexe == "Femme", 1, 2)) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+sexe %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+
+---
+class: excel, center
+
+## Un style (couleur, italique, ...) n'est pas une variable !
+
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+score <- data.frame(
+  id = 1:5,
+  score = sample(0:10, 5, replace = TRUE)
+) %>% 
+  mutate(diagnostic = case_when(score < 4 ~ "mauvais",
+                                score >= 4 & score < 8 ~"moyen",
+                                TRUE ~ "bon"))
+bad <- which(pull(score, score) < 4)
+bof <- which(pull(score, score) >= 4 & pull(score, score) < 8)
+good <- which(pull(score, score) >= 8)
+score %>% 
+  select(-diagnostic) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling() %>% 
+  row_spec(bad, background = "red") %>% 
+  row_spec(bof, background = "orange") %>% 
+  row_spec(good, background = "green")
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+score %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## On ne met que les données brutes !
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+x <- sample(18:70, 5, replace = TRUE)
+age <- data.frame(
+  id = c(1:5, "", "Moyenne"),
+  age = c(x, NA_real_, mean(x))
+)
+age %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+age %>% 
+  filter(id %in% 1:5) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## Attention au variables numériques !
+
+.pull-left[
+
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+age2 <- data.frame(
+  id = c(1:5),
+  age = c("31 ans", 33, 37, "08/10/2001", "66ans")
+)
+age2 %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+
+]
+
+--
+
+.pull-right[
+
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+age %>% 
+  filter(id %in% 1:5) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+
+]
+
+---
+class: excel, center
+
+## Modalités homogènes !
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+sexe %>% 
+  mutate(sexe = c("Femme", "Homme", "Fille", "Féminin", "F")) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+sexe %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## Dates homogènes (et notations universelles) !
+
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+data.frame(
+  id = 1:5,
+  date = c("08/10/2019", "1er septembre 1995", "12 dec 2008", "01-05-08", "07/07/07")
+) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+data.frame(
+  id = 1:5,
+  date = c("08/10/2019", "01/09/1995", "12/12/2008", "01/05/2008", "07/07/2007")
+) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## Valeurs manquantes homogènes !
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+data.frame(
+  id = 1:5,
+  age = c("25", "NA", "", "33", "-")
+) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+data.frame(
+  id = 1:5,
+  age = c("25", "NA", "NA", "33", "NA")
+) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## Décimales homogènes !
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+data.frame(
+  id = 1:5,
+  taux = c("25,30", "", "12.46", "33.23", "5,89")
+) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+data.frame(
+  id = 1:5,
+  taux = c("25,30", "", "12,46", "33,23", "5,89")
+) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## Les commentaires dans une colonne séparée !
+
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+sexe %>% 
+  mutate(sexe = c("Femme", "Homme", "Femme (à vérifier)", "Femme", "Femme")) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+sexe %>% 
+  mutate(sexe = c("Femme", "Homme", "Femme", "Femme", "Femme")) %>% 
+  mutate(commentaires = c("", "", "à vérifier", "", "")) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel, center
+
+## Base anonyme !
+
+.pull-left[
+## .red[<i class="fa fa-times-circle"></i> NON !]
+
+```{r echo = FALSE}
+score %>% 
+  select(-id) %>% 
+  mutate(nom = c("Louis", "Maringot", "Durand", "Laplace", "Reynaud"),
+         prenom = c("Martine", "Alain", "Elsa", "Henriette", "Paulette")) %>% 
+  select(prenom, nom, everything()) %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+--
+
+.pull-right[
+## .green[<i class="fa fa-check-circle"></i> OUI !] 
+
+```{r echo = FALSE}
+ score %>% 
+  kable(format = "html", escape = FALSE) %>% 
+  kable_styling()
+```
+]
+
+---
+class: excel
+
+## Noms des colonnes !
+
++ intelligibles
+
++ metadonnées
+
++ enlever l'inutile
+
++ format homogène
+
++ attention longueur

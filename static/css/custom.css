@@ -59,3 +59,56 @@ th, td {
   background-color: #002240;
   color: #FFFFFF;
 }
+
+.big {
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.small {
+  font-size: 80%;
+}
+.borderplus td {
+  border: 1px solid rgb(85,85,85);
+}
+
+.excel table,
+.excel table thead,
+.excel table tbody,
+.excel tbody tr td,
+.excel thead,
+.excel thead tr,
+.excel thead tr th {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  font-size: 90%;
+}
+
+.row{
+  background-color: #FFEA46;
+  color: black;
+}
+
+.column{
+  background-color: #00204D;
+  color: white;
+  font-weight: bold;
+}
+
+.donnee{
+  background-color: #7C7B78;
+  color: white;
+  font-weight: bold;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 4px;
+}
+
+.green {
+  color: rgb(0, 128, 0);
+}
+
+.red {
+  color: red;
+}
