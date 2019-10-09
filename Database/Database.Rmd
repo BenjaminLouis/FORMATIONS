@@ -48,7 +48,7 @@ Beaucoup du contenu de cette présentation provient de : [https://thinkr.fr/base
 
 by 
 
-<img src="../static/img/thinkr.png" width="200">
+[<img src="../static/img/thinkr.png" width="200">](https://thinkr.fr)
 ]
 
 ]
@@ -573,14 +573,23 @@ score %>%
 ---
 class: excel
 
-## Noms des colonnes !
+## Noms des colonnes ! (et des modalités)
 
-+ intelligibles
++ __Intelligibles__ :
+  + .red[<i class="fa fa-times-circle"></i>] `variable_1`, `tdcs`, `v2`
+  + .green[<i class="fa fa-check-circle"></i>] `age`, `rendement`, `temperature`
 
-+ metadonnées
++ __Attention à la longueur__ :
+  + .red[<i class="fa fa-times-circle"></i>] `fiche_35_session_3_jour4_par_temps_de_pluie_score`
+  + .green[<i class="fa fa-check-circle"></i>] `score_f35s3j4`
 
-+ enlever l'inutile
++ __Metadonnées__ : fichier supplémentaire qui définit les colonnes (description, unité, description modalités, ...)
 
-+ format homogène
 
-+ attention longueur
++ __Format homogène, pas d'espace, pas d'accent__ :
+  + .red[<i class="fa fa-times-circle"></i>] `Rendement (Q_ha)`, `sexe`, `scoreJour1`, `taux_carbone`
+  + .green[<i class="fa fa-check-circle"></i>] `rendement`, `sexe`, `score_j1`, `taux_carbone`
+  
+  cf package `{janitor}` et [http://stat405.had.co.nz/r-style.html](http://stat405.had.co.nz/r-style.html)
+
++ __Enlever les colonnes inutiles__ (colonnes vides, colonnes ajoutées par logiciel de sondage, ...)
