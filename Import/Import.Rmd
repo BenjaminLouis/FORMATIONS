@@ -1,6 +1,6 @@
 ---
 title: "Importation de données"
-subtitle: "Le choix du format"
+subtitle: "ou le choix du format"
 author: "Benjamin Louis"
 date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
 output:
@@ -12,3 +12,82 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+# Une multitude de formats
+
+.center[
+<img src="../static/img/import.svg" width="90%">
+]
+
+$+$ shapefiles, images, API, SPSS, Stata ...
+
+---
+class: inverse, center, middle
+
+# Fichiers text (.csv)
+
+<img src="../static/img/readr.svg" width="30%">
+
+---
+class: inverse, center, middle
+
+# Fichiers excel (.xls, .xlsx)
+
+<img src="../static/img/readxl.svg" width="30%">
+
+---
+class: inverse, center, middle
+
+# Autres formats
+
+---
+
+# Autres formats
+
+.grid-container[
+
+.row[
+.col-2[`readODS` :]
+.col-10[[https://cran.r-project.org/web/packages/readODS/index.html](https://cran.r-project.org/web/packages/readODS/index.html)]
+]
+
+.row[
+.col-2[<img src="../static/img/dplyr.svg" width="35%"> (DBI)]
+.col-10[<br/>[https://dbplyr.tidyverse.org/](https://dbplyr.tidyverse.org/)]
+]
+
+.row[
+.col-2[`pdftools`]
+.col-10[[https://docs.ropensci.org/pdftools/](https://docs.ropensci.org/pdftools/)]
+]
+
+
+.row[
+.col-2[<img src="../static/img/rvest.svg" width="35%">]
+.col-10[<br/>[https://rvest.tidyverse.org/](https://rvest.tidyverse.org/)]
+]
+
+
+.row[
+.col-2[`jsonlite`]
+.col-10[[https://github.com/jeroen/jsonlite](https://github.com/jeroen/jsonlite)]
+]
+
+.row[
+.col-2[__...__]
+.col-10[]
+]
+
+]
+
+
+---
+
+# Crédits
+
+__Files icons (except ods)__ made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/"         title="Flaticon">www.flaticon.com</a>
+
+
+__Webpage icon__ made by <a href="https://www.flaticon.com/<?=_('authors/')?>vectors-market" title="Vectors Market">Vectors Market</a> from <a href="https://www.flaticon.com/"         title="Flaticon">www.flaticon.com</a>
+
+__ods icon__ made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>

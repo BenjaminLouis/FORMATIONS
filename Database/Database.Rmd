@@ -78,7 +78,7 @@ data.frame(
 
 
 .small[
-.row[Ligne] : 
+.rowtable[Ligne] : 
 + __1 ligne = 1 observation/individu statistique__ (une personne, une parcelle, ...).
 + Si répétition --> 1 ligne par répétition. Il est toujours bon d'avoir une colonne avec un identifiant unique pour chaque observation.
 
