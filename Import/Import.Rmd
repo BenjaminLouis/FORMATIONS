@@ -13,6 +13,11 @@ output:
       countIncrementalSlides: false
 ---
 
+```{r setup, echo = FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+
 # Une multitude de formats
 
 .center[
@@ -29,11 +34,91 @@ class: inverse, center, middle
 <img src="../static/img/readr.svg" width="30%">
 
 ---
+
+# Importation avec <img src="../static/img/readr.svg" width="7%">
+
+#### <i class="fas fa-arrow-circle-right"></i> `read_delim()`
+
+```{r eval = FALSE}
+read_delim(file = "chemin/vers/fichier.csv", delim = ";", 
+           na = c("", "NA"), col_types = NULL,
+           locale = locale(decimal.mark = "."))
+
+```
+
+#### <i class="fas fa-arrow-circle-right"></i> Autres fonctions avec des valeurs fixes pour `delim`
+
++ `read_csv` pour `delim = ","`
+
++ `read_csv2` pour `delim = ";"`
+
++ `read_tsv` pour `delim = "\t"` (tabulation)
+
+---
+
+# Importation avec <img src="../static/img/readr.svg" width="7%">
+
+#### <i class="fas fa-arrow-circle-right"></i> Argument `col_types =`
+
++ `NULL` : le type des colonnes est deviné
+
++ `cols(nom_col1 = col_double(), nom_col2 = col_date(), ...)` : il faut préciser pour __toutes__ les colonnes !
+
++ `cols_only(nom_col1 = col_double(), nom_col2 = col_date())` : il faut préciser pour __certaines__ colonnes !
+
++ `c("d", "c", "?", "-",  ...)` il faut préciser pour __toutes__ les colonnes !
+
+```{r eval = FALSE}
+# Pour plus d'information
+?read_delim
+?cols
+?cols_only
+vignette("readr")
+```
+
+---
 class: inverse, center, middle
 
 # Fichiers excel (.xls, .xlsx)
 
 <img src="../static/img/readxl.svg" width="30%">
+
+---
+
+# Importation avec <img src="../static/img/readxl.svg" width="7%">
+
+#### <i class="fas fa-arrow-circle-right"></i> `read_excel()`
+
+```{r eval = FALSE}
+read_excel(path = "chemin/vers/fichier.xls", sheet = NULL, 
+           range = NULL, na = "", col_types = NULL)
+
+```
+
++ `sheet` : nom de la feuille (e.g. `sheet = "feuille1"`)
+
++ `range` : plage des cellules (e.g. `range = "B3:D87"`)
+
+#### <i class="fas fa-arrow-circle-right"></i> Autres fonctions si on connait le format
+
++ `read_xls` si l'extension est __.xls__
+
++ `read_xlsx` si l'extension est __.xlsx__
+
+---
+
+# Importation avec <img src="../static/img/readxl.svg" width="7%">
+
+#### <i class="fas fa-arrow-circle-right"></i> Argument `col_types =`
+
++ `NULL` : le type des colonnes est deviné
+
++ `c("numeric", "text", "skip", "guess"  ...)` il faut préciser pour __toutes__ les colonnes !
+
+```{r eval = FALSE}
+# Pour plus d'information
+?read_excel
+```
 
 ---
 class: inverse, center, middle
