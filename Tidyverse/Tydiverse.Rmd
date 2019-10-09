@@ -1,0 +1,141 @@
+---
+title: "Manipuler ses données avec le tidyverse"
+author: "Benjamin Louis"
+date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
+output:
+  xaringan::moon_reader:
+    css: [default, default-fonts, "../static/css/custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: agate
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+library(tibble)
+```
+
+class: inverse, middle, center
+
+
+<img src="../static/img/tidyverse.svg" width="50%">
+
+---
+
+# Le tidyverse
+
++ Ensemble de packages destinés à la science des données
+
++ (Co)développés par [Hadley Wickham](http://hadley.nz/), _chief scientist_ chez <img src="../static/img/RStudio.svg" width="7%">
+
++ Philosophie, grammaire et structure de données communes : 
+  + _tidy data_
+  + _layered grammar of graphics_
+
++ Instalation complète :
+
+```{r eval = FALSE}
+install.packages("tidyverse")
+```
+
+---
+
+# Le tidyverse
+
+.center[
+<img src="../static/img/all_tidyverse.svg" width="80%">
+]
+
+---
+
+# Le tidyverse
+
+.center[
+<img src="../static/img/all_tidyverse_2.svg" width="90%">
+]
+
+.footnote[
+et plus encore ...
+]
+
+---
+class: inverse, middle, center
+
+<img src="../static/img/tibble.svg" width="50%">
+
+---
+
+# _tibble_, un autre data.frame
+
+
+> _On garde le bon, on jette le mauvais_
+
++ Pas de changement du nom ou du type des variables
+
++ une méthode `print()` améliorée
+
+
+```{r}
+as_tibble(iris)
+```
+
+---
+
+# _tibble_, création
+
+.pull-left[
+#### Comme `data.frame()`
+
+```{r}
+tibble(x = 1:5, y = 1, 
+       z = x ^ 2 + y)
+```
+]
+
+.pull-right[
+#### ou par ligne
+
+```{r}
+tribble(
+  ~x, ~y,  ~z,
+  "a", 2,  3.6,
+  "b", 1,  8.5
+)
+```
+]
+
+.footnote[
+<sup>*</sup>Les exemples proviennent de [https://tibble.tidyverse.org/](https://tibble.tidyverse.org/)
+]
+---
+class: inverse, middle, center
+
+<img src="../static/img/tidyr.svg" width="50%">
+
+---
+
+### `tidyr::pivot_*`
+
+.footnote[
+<sup>*</sup>Les animations proviennent de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]
+---
+class: inverse, middle, center
+
+<img src="../static/img/dplyr.svg" width="50%">
+
+---
+
+# Références
+
++ [https://www.tidyverse.org/](https://www.tidyverse.org/)
+
++ [https://thinkr.fr/tidyverse-hadleyverse/](https://thinkr.fr/tidyverse-hadleyverse/)
+
++ [https://r4ds.had.co.nz/](https://r4ds.had.co.nz/)
+
++ [http://vita.had.co.nz/papers/tidy-data.html](http://vita.had.co.nz/papers/tidy-data.html)
+
++ [http://vita.had.co.nz/papers/layered-grammar.html](http://vita.had.co.nz/papers/layered-grammar.html)
