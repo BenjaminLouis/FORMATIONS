@@ -191,9 +191,18 @@ th, td {
   font-size: 110%;
 }
 
-.small {
+.lesssmall, .lesssmall .remark-code {
+  font-size: 90%;
+}
+
+.small, .small .remark-code {
   font-size: 80%;
 }
+
+.tiny {
+  font-size: 60%;
+}
+
 .borderplus td {
   border: 1px solid rgb(85,85,85);
 }
