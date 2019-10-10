@@ -247,3 +247,7 @@ th, td {
 .red {
   color: red;
 }
+
+.remark-slide-content.wider {
+  padding: 1em 1em 1em 1em;
+}

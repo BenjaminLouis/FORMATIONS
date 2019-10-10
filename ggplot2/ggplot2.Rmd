@@ -1,5 +1,6 @@
 ---
-title: '<img src="../static/img/ggplot2.svg" width="50%">'
+title: '<img src="../static/img/ggplot2.svg" width="30%">'
+subtitle: "Un puissant package de visualisation"
 author: "Benjamin Louis"
 date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
 output:
@@ -11,3 +12,836 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+library(ggplot2)
+library(tibble)
+```
+
+# `ggplot2`
+
++ Développé par [Hadley Wickham](http://hadley.nz/)
+
++ Package du _Tidyverse_
+
++ Se veut élégant et polyvalent
+
++ Applique le _grammar of graphics_ sytème
+
++ Template :
+
+```{r eval = FALSE}
+ggplot(data = mon_data) +
+  aes(x = var_x, y = var_y) +
+  geom_***() +
+  ...
+```
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris)
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris)
+```
+]
+]]
+
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length)
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length)
+```
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point()
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point()
+```
+]
+]]
+
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species))
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species))
+```
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal")
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal")
+```
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal")
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal")
+```
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2")
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2")
+```
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw()
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw()
+```
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  geom_smooth(method = "lm")
+```
+]
+]
+.col-7[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  geom_smooth(method = "lm")
+```
+]
+]]
+
+---
+class: inverse, middle, center
+
+# Autres `geom_*`
+
+---
+class: wider
+
+### `geom_boxplot()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot()
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot()
+```
+]
+]]
+
+
+---
+class: wider
+
+### `geom_jitter()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_jitter()
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_jitter()
+```
+]
+]]
+
+---
+class: wider
+
+### `geom_violin()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_violin()
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_violin()
+```
+]
+]]
+
+---
+class: wider
+
+### `geom_histogram()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Length) +
+  geom_histogram()
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7, message = FALSE, warning = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Length) +
+  geom_histogram()
+```
+]
+]]
+
+---
+class: wider
+
+### `geom_histogram()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Length) +
+  geom_histogram(bins = 10)
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7, message = FALSE, warning = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Length) +
+  geom_histogram(bins = 10)
+```
+]
+]]
+
+---
+class: wider
+
+### `geom_bar()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species) +
+  geom_bar()
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7, message = FALSE, warning = FALSE}
+ggplot(iris) +
+  aes(x = Species) +
+  geom_bar()
+```
+]
+]]
+
+---
+class: wider
+
+### `geom_line()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+dt <- tibble(x = 1:10, y = 11:20)
+ggplot(dt) +
+  aes(x = x, y = y) +
+  geom_line()
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7, message = FALSE, warning = FALSE}
+
+dt <- tibble(x = 1:10, y = 11:20)
+ggplot(dt) +
+  aes(x = x, y = y) +
+  geom_line()
+```
+]
+]]
+
+---
+
+# Autres
+
++ `geom_smooth()`
+
++ `geom_freqpoly()`
+
++ `geom_abline()`
+
++ `geom_hline()`
+
++ `geom_vline()`
+
++ `geom_polygon()`
+
++ `geom_text()`
+
++ `geom_label()`
+
++ ...
+
+
+---
+class: inverse, middle, center
+
+# Facetting
+
+---
+class: wider
+
+### `facet_wrap()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~Species)
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~Species)
+```
+]
+]]
+
+
+---
+class: wider
+
+### `facet_grid()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(mtcars) +
+  aes(x = wt, y = qsec) +
+  geom_point() +
+  facet_grid(cyl ~ vs)
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(mtcars) +
+  aes(x = wt, y = qsec) +
+  geom_point() +
+  facet_grid(cyl ~ vs)
+```
+]
+]]
+
+---
+
+# Controler les échelles
+
++ `scales = "fixed` : échelles fixes pour tous les graphiques
+
++ `scales = "free_x` : abscisses libres, ordonnées fixes
+
++ `scales = "free_y` : abscisses fixes, ordonnées libres
+
++ `scales = "free` : échelles libres pour tous les graphiques
+
+---
+class: inverse, middle, center
+
+# Annotation
+
+---
+class: wider
+
+### `annotate()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom")
+  annotate("text", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6)
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  annotate("text", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6)
+```
+]
+]]
+
+---
+class: wider
+
+### `annotate()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  annotate("label", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6)
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  annotate("label", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6)
+```
+]
+]]
+
+---
+class: wider
+
+### `annotate()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  annotate("label", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6,
+           color = "white", fill = "red")
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  annotate("label", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6,
+           color = "white", fill = "red")
+```
+]
+]]
+
+---
+class: inverse, middle, center
+
+# Couleurs & légendes
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark()
+```
+
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark()
+```
+]
+]]
+
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_discrete(name = "Nom choisit")
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_discrete(name = "Nom choisit")
+```
+]
+]]
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_manual(values = c("yellow", "orange", "red"))
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_manual(values = c("yellow", "orange", "red"))
+```
+]
+]]
+
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+.small[
+```{r eval = FALSE}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_viridis_d()
+```
+]
+]
+.col-6[
+```{r echo = FALSE, out.width = "90%", fig.width = 7}
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_viridis_d()
+```
+]
+]]
+
+.footnote[
+<sup>*</sup>[https://rtask.thinkr.fr/fr/ggplot2-welcome-viridis/](https://rtask.thinkr.fr/fr/ggplot2-welcome-viridis/)
+]
+
+---
+class: inverse, middle, center
+
+# Extensions
+
+---
+class: center, middle
+
+# R graph gallery
+
+[https://www.r-graph-gallery.com/](https://www.r-graph-gallery.com/)
+
+---
+class: center, middle
+
+# ggplot2 extensions gallery
+
+[https://www.ggplot2-exts.org/gallery/](https://www.ggplot2-exts.org/gallery/)
+
+---
+class: inverse
+
+# Exercice
