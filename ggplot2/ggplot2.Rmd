@@ -17,6 +17,9 @@ output:
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 library(ggplot2)
 library(tibble)
+library(readr)
+library(tidyr)
+library(dplyr)
 ```
 
 # `ggplot2`
@@ -844,4 +847,62 @@ class: center, middle
 ---
 class: inverse
 
-# Exercice
+# Exercice 1
+
+À partir de _tidywoo_, faire différents graphiques pour prendre ne main ggplot2
+
+---
+class: inverse
+
+# Exercice 2
+
+À partir du jeu de données _solubility.csv_
+
+.center[
+```{r echo = FALSE, message = FALSE, warning = FALSE, fig.asp = 0.8, out.width = "80%", dpi = 150}
+dataset <- read_delim(here::here("static/data/solubility.csv"), ";")
+
+dataset %>%  
+  pivot_longer(MolWeight:SurfaceArea2, names_to = "caract", values_to = "value") %>% 
+  ggplot() +
+  aes(x = value, y = solubility) +
+  geom_point(color = "grey") +
+  facet_wrap(~caract, ncol = 5, scales = "free_x") +
+  geom_smooth(aes(color = caract), show.legend = FALSE, method = "lm") +
+  theme_bw() +
+  theme(strip.background = element_rect(fill = "black"),
+        strip.text = element_text(color = "white", face = "bold"),
+        axis.title = element_text(size = 12, face = "bold")) +
+  scale_color_viridis_d(option = "D") +
+  labs(y = "Solubilité", x = "Valeurs des caractéristiques moléculaires")
+```
+]
+
+
+---
+class: inverse, wider
+
+# Correcion exercice 2
+
+
+```{r eval = FALSE}
+# Importation
+dataset <- read_delim(here::here("static/data/solubility.csv"), ";")
+# manipulation
+dataset %>%  
+  pivot_longer(MolWeight:SurfaceArea2, names_to = "caract", 
+               values_to = "value") %>% 
+  # Graphique
+  ggplot() +
+  aes(x = value, y = solubility) +
+  geom_point(color = "grey") +
+  facet_wrap(~caract, ncol = 5, scales = "free_x") +
+  geom_smooth(aes(color = caract), show.legend = FALSE, method = "lm") +
+  theme_bw() +
+  theme(strip.background = element_rect(fill = "black"),
+        strip.text = element_text(color = "white", face = "bold"),
+        axis.title = element_text(size = 12, face = "bold")) +
+  scale_color_viridis_d(option = "D") +
+  labs(y = "Solubilité", x = "Valeurs des caractéristiques moléculaires")
+```
+
