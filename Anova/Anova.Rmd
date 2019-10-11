@@ -21,3 +21,354 @@ library(readr)
 library(tidyr)
 library(dplyr)
 ```
+
+# Définition et objetif
+
+__Modèle général__ :
+
+.center[
+
+$y_{ij...nr} = \mu + \alpha_{i} + \beta_{j} + ... + \gamma_{n} + ... + \alpha\beta_{ij} + ... + \beta\gamma_{jn} + \epsilon_{ij...nr}$
+
+$\epsilon_{ij...nr} \rightarrow N(0, \sigma^2)~~~~~~cov(\epsilon_{ij...nr},\epsilon_{i'j'...n'r'}) = 0$
+
+]
+
+
+.small[
++ $\mu$ : intercept
++ $\alpha$, $\beta$, $\gamma$ : variables qualitatives
++ $\alpha_{i}$ : valeur pour la modalité $i$ de la variable associée au paramètre $\alpha$
++ $\alpha\beta$ : interaction entre $\alpha$ et $\beta$
++ $\epsilon$ : erreur résiduelle
+]
+
+__Objectif principal__ :
+
+Tester et étudier l'influence de variables qualitatives sur une variable numérique. 
+
+__Hypothèses__ :
+
+.small[
++ Sur les résidus
++ Sur les coefficients : $\alpha_{ref} = 0$ ou $\sum_i\alpha_{i} = 0$ 
+]
+
+---
+
+# Exemple
+
++ Expérimentation en plein champ avec I = 3 variétés différentes de blé et J = 2 types de fongicides
+
+<br/>
+
++ 54 parcelles : 9 répétitions pour chaque pair de variété et fongicide
+
+<br/>
+
++ Question : existe t-il des différences de rendement entre les variétés de blé et selon le fongicide utilisé ?
+
+<br/>
+
++ Model :
+.center[
+
+$rendement_{ijr} = \mu + \alpha_{variete = i} + \beta_{fongicide=j} + \alpha\beta_{variete = i,fongicide=j} + \epsilon_{ijr}$
+
+]
+
+---
+class: wider
+
+### Estimation par moindres carrés (modèle à 1 facteur !)
+
+.container-grid[
+.row[
+.col-5[
+.small[
+```{r eval = FALSE}
+# Par défaut dans R
+#
+#
+```
+]
+]
+.col-1[]
+.col-5[
+.small[
+```{r eval = FALSE}
+options(contrasts=c("contr.sum","contr.sum"))
+# ou
+FactoMineR::AovSum()
+```
+]
+]
+]
+.small[
+.row[
+.col-5[
++ $\hat{\mu} = \bar{y}_{i=ref}$
+
++ $\hat{\alpha}_{i=ref} = 0\\\hat{\alpha}_{i \neq ref} =  \bar{y}_{i \neq ref} - \mu$
+
+]
+.col-1[]
+.col-5[
++ $\hat{\mu} = \bar{y}$
+
++ $\hat{\alpha}_{i} =  \bar{y}_{i} - \mu$
+]
+]
+]
+]
+
+<hr/>
+
++ $\hat{y}_{ik} = \hat{\mu} + \hat{\alpha}_{i}$ 
+
++ $\epsilon_{ik} = y_{ik} - \hat{y}_{ik}$ 
+
++ $\hat{\sigma}^2 = \frac{\sum_{ik}\epsilon^2_{ik}}{n - I}$
+
++ $\hat{\sigma}^2_{\hat{\alpha}_{i} } = \frac{I - 1}{n}\hat{\sigma}^2$
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length<sub>ik</sub>]
+.col-1[] 
+.col-1[]
+.col-1[]
+.col-1[]
+.col-5[]
+]]
+
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+set.seed(7)
+iris %>% 
+  mutate(mu = mean(Sepal.Length, na.rm = TRUE),
+         rk = as.numeric(Species)) %>% 
+  mutate(jitterpoint = rk + rnorm(n(), 0, 0.2)) %>% 
+  group_by(Species) %>%   
+  mutate(rkmin = 0.99*min(jitterpoint),
+         rkmax = 1.01*max(jitterpoint)) %>% 
+  mutate(preds = mean(Sepal.Length, na.rm = TRUE)) %>% 
+  mutate(alphas = preds - mu,
+         res = Sepal.Length - preds) %>% 
+  ggplot() +
+  aes(x = Species, y = Sepal.Length) +
+  geom_jitter(width = 0.4, color = "transparent") +
+  geom_point(aes(x = jitterpoint)) +
+  theme_bw() + 
+  theme(axis.title = element_text(size = 13, face = "bold"),
+        axis.text = element_text(size = 11, face = "bold"),
+        axis.title.x = element_text(color = "transparent"),
+        axis.text.x = element_text(color = "transparent"))
+```
+
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length<sub>ik</sub>]
+.col-1[= .boxgrey[&mu;]] 
+.col-1[]
+.col-1[]
+.col-1[]
+.col-5[]
+]]
+
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+set.seed(7)
+iris %>% 
+  mutate(mu = mean(Sepal.Length, na.rm = TRUE),
+         rk = as.numeric(Species)) %>% 
+  mutate(jitterpoint = rk + rnorm(n(), 0, 0.2)) %>% 
+  group_by(Species) %>%   
+  mutate(rkmin = 0.99*min(jitterpoint),
+         rkmax = 1.01*max(jitterpoint)) %>% 
+  mutate(preds = mean(Sepal.Length, na.rm = TRUE)) %>% 
+  mutate(alphas = preds - mu,
+         res = Sepal.Length - preds) %>% 
+  ggplot() +
+  aes(x = Species, y = Sepal.Length) +
+  geom_jitter(width = 0.4, color = "transparent") +
+  geom_point(aes(x = jitterpoint)) +
+  theme_bw() + 
+  theme(axis.title = element_text(size = 13, face = "bold"),
+        axis.text = element_text(size = 11, face = "bold"),
+        axis.title.x = element_text(color = "transparent"),
+        axis.text.x = element_text(color = "transparent")) +
+  
+  geom_segment(aes(x = min(rk) - 0.4, xend = max(rk) + 0.4,
+                   y = mu, yend = mu), color = "grey", size = 2) +
+  geom_label(aes(x = 0.4, y = mu, label = round(mu, 1)), fill = "grey", color = "black",  hjust = -0.3) +
+  geom_segment(aes(x = 0.4, xend = 0.43, y = mu, yend = mu), color = "grey")
+```
+
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length<sub>ik</sub>]
+.col-1[= .boxgrey[&mu;]] 
+.col-1[\+ &alpha;<sub>i</sub>]
+.col-1[]
+.col-1[]
+.col-5[, .small[i = {.boxgreen[setosa]|.boxorange[versicolor]|.boxpurple[virginica]}]]
+]]
+
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+set.seed(7)
+iris %>% 
+  mutate(mu = mean(Sepal.Length, na.rm = TRUE),
+         rk = as.numeric(Species)) %>% 
+  mutate(jitterpoint = rk + rnorm(n(), 0, 0.2)) %>% 
+  group_by(Species) %>%   
+  mutate(rkmin = 0.99*min(jitterpoint),
+         rkmax = 1.01*max(jitterpoint)) %>% 
+  mutate(preds = mean(Sepal.Length, na.rm = TRUE)) %>% 
+  mutate(alphas = preds - mu,
+         res = Sepal.Length - preds) %>% 
+  ggplot() +
+  aes(x = Species, y = Sepal.Length) +
+  geom_jitter(width = 0.4, color = "transparent") +
+  geom_point(aes(x = jitterpoint)) +
+  theme_bw() +
+  theme(axis.title = element_text(size = 13, face = "bold"),
+        axis.text = element_text(size = 11, face = "bold")) +
+  geom_segment(aes(x = min(rk) - 0.4, xend = max(rk) + 0.4,
+                   y = mu, yend = mu), color = "grey", size = 2) +
+  geom_label(aes(x = 0.4, y = mu, label = round(mu, 1)), fill = "grey", color = "black",  hjust = -0.3) +
+  geom_segment(aes(x = 0.4, xend = 0.43, y = mu, yend = mu), color = "grey") +
+  aes(color = Species) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  guides(color = FALSE, fill = FALSE) +
+  geom_segment(aes(x = rkmin, xend = rkmax,
+                   y = preds, yend = preds), size = 2) +
+  geom_segment(aes(x = rk, xend = rk, y = mu, yend = preds),
+               arrow = arrow(length = unit(0.015, "npc"), type = "closed",
+                             ends = "both")) +
+  geom_text(aes(x = 0.4, y = preds, label = round(preds, 1)), hjust = -0.3) +
+  geom_segment(aes(x = 0.4, xend = 0.43, y = preds, yend = preds)) +
+  geom_label(aes(x = rk, y = (mu+preds)/2, label = round(alphas,2), fill = Species), color = "white") 
+```
+
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length<sub>ik</sub>]
+.col-1[= .boxgrey[&mu;]] 
+.col-1[\+ &alpha;<sub>i</sub>]
+.col-1[\+ &epsilon;<sub>ik</sub>]
+.col-1[]
+.col-5[, .small[i = {.boxgreen[setosa]|.boxorange[versicolor]|.boxpurple[virginica]}]]
+]]
+
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+set.seed(7)
+iris %>% 
+  mutate(mu = mean(Sepal.Length, na.rm = TRUE),
+         rk = as.numeric(Species)) %>% 
+  mutate(jitterpoint = rk + rnorm(n(), 0, 0.2)) %>%
+  group_by(Species) %>%  
+  mutate(rkmin = 0.99*min(jitterpoint),
+         rkmax = 1.01*max(jitterpoint)) %>% 
+  mutate(preds = mean(Sepal.Length, na.rm = TRUE)) %>% 
+  mutate(alphas = preds - mu,
+         res = Sepal.Length - preds) %>% 
+  ggplot() +
+  aes(x = Species, y = Sepal.Length) +
+  geom_jitter(width = 0.4, color = "transparent") +
+  geom_point(aes(x = jitterpoint)) +
+  theme_bw() + 
+  theme(axis.title = element_text(size = 13, face = "bold"),
+        axis.text = element_text(size = 11, face = "bold")) +
+  geom_segment(aes(x = min(rk) - 0.4, xend = max(rk) + 0.4,
+                   y = mu, yend = mu), color = "grey", size = 2) +
+  geom_label(aes(x = 0.4, y = mu, label = round(mu, 1)), fill = "grey", color = "black",  hjust = -0.3) +
+  geom_segment(aes(x = 0.4, xend = 0.43, y = mu, yend = mu), color = "grey") +
+  aes(color = Species) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  guides(color = FALSE, fill = FALSE) +
+  geom_segment(aes(x = rkmin, xend = rkmax,
+                   y = preds, yend = preds), size = 2) +
+  geom_segment(aes(x = rk, xend = rk, y = mu, yend = preds),
+               arrow = arrow(length = unit(0.015, "npc"), type = "closed",
+                             ends = "both")) +
+  geom_text(aes(x = 0.4, y = preds, label = round(preds, 1)), hjust = -0.3) +
+  geom_segment(aes(x = 0.4, xend = 0.43, y = preds, yend = preds)) +
+  geom_segment(aes(x = jitterpoint, xend = jitterpoint, y = preds, yend = Sepal.Length), color = "black", linetype = "dashed", alpha = 0.5) +
+  geom_label(aes(x = rk, y = (mu + preds)/2, label = round(alphas, 2), fill = Species), color = "white")
+```
+
+---
+
+# Test de l'effet d'un facteur
+
+somme des carrés des écarts --> entre coef est plus grand que résidus (avec graphiqu précédent)
+
+
+il faut normaliser avec ddl !!
+
+stiatistiques des test, hypothèse et distribution
+
+exemple avec tableau issue de R
+
+attention p-value!!! (exemple piège)
+
+autres exmples avec plus facteurs
+
+tests des coeffcients
+
+tests post-hoc
+
+exercices
+
+
+---
+class: inverse, middle, center
+
+# Anova dans le cas particulier d'un alpha-plan
+
+---
+
+# Définition
+
+
+---
+
+# Particularités
+
+
+---
+
+# Dans R : estimation
+
+
+---
+
+# Dans R :  tests post-hoc
+
+---
+
+# Exercices
+
+
+
+
