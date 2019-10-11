@@ -1,0 +1,23 @@
+---
+title: 'Analyses exploratoires des données'
+subtitle: "Faire connaissance avec ses données"
+author: "Benjamin Louis"
+date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
+output:
+  xaringan::moon_reader:
+    css: [default, default-fonts, "../static/css/custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: agate
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+library(ggplot2)
+library(tibble)
+library(readr)
+library(tidyr)
+library(dplyr)
+```
