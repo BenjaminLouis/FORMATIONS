@@ -2,6 +2,11 @@
 /* MY CUSTOM */
 /*************/
 
+@page:first{
+  @top-left-corner {
+    content: "test";
+  }
+}
 /* GRID */
 /* ----- */
 
@@ -244,6 +249,9 @@ th, td {
   color: rgb(0, 128, 0);
 }
 
+.orange {
+  color: orange;
+}
 .red {
   color: red;
 }
