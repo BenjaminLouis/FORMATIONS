@@ -19,6 +19,7 @@ library(ggplot2)
 library(tibble)
 library(readr)
 library(tidyr)
+library(viridis)
 library(dplyr)
 ```
 
@@ -126,7 +127,7 @@ FactoMineR::AovSum()
 
 + $\hat{y}_{ik} = \hat{\mu} + \hat{\alpha}_{i}$ 
 
-+ $\epsilon_{ik} = y_{ik} - \hat{y}_{ik}$ 
++ $e_{ik} = y_{ik} - \hat{y}_{ik}$ 
 
 + $\hat{\sigma}^2 = \frac{\sum_{ik}\epsilon^2_{ik}}{n - I}$
 
@@ -261,7 +262,7 @@ iris %>%
                              ends = "both")) +
   geom_text(aes(x = 0.4, y = preds, label = round(preds, 1)), hjust = -0.3) +
   geom_segment(aes(x = 0.4, xend = 0.43, y = preds, yend = preds)) +
-  geom_label(aes(x = rk, y = (mu+preds)/2, label = round(alphas,2), fill = Species), color = "white") 
+  geom_label(aes(x = rk, y = (mu+preds)/2, label = round(alphas,1), fill = Species), color = "white") 
 ```
 
 
@@ -314,32 +315,197 @@ iris %>%
   geom_text(aes(x = 0.4, y = preds, label = round(preds, 1)), hjust = -0.3) +
   geom_segment(aes(x = 0.4, xend = 0.43, y = preds, yend = preds)) +
   geom_segment(aes(x = jitterpoint, xend = jitterpoint, y = preds, yend = Sepal.Length), color = "black", linetype = "dashed", alpha = 0.5) +
-  geom_label(aes(x = rk, y = (mu + preds)/2, label = round(alphas, 2), fill = Species), color = "white")
+  geom_label(aes(x = rk, y = (mu + preds)/2, label = round(alphas, 1), fill = Species), color = "white")
 ```
 
 ---
 
-# Test de l'effet d'un facteur
+# Test de l'effet d'une variable
 
-somme des carrés des écarts --> entre coef est plus grand que résidus (avec graphiqu précédent)
+.big[<i class = "fas fa-arrow-circle-right"></i> La variabilité de]  $y$ .big[entre les modalités de la variable  est elle _significativement_ plus grande que la variabilté résiduelle ?]
 
 
-il faut normaliser avec ddl !!
+####.orange[<i class = "fas fa-exclamation-triangle"></i>] Dans le cas d'un plan équilibré .orange[<i class = "fas fa-exclamation-triangle"></i>] :
 
-stiatistiques des test, hypothèse et distribution
 
-exemple avec tableau issue de R
+$\sum_{ij}\left(y_{ij} - \bar{y}\right)^2~~~~~=~~~~~~~~\frac{n}{I}\sum_{i}\left(\hat{\alpha}_i\right)^2~~~~~~~~~+~~~~~~~~~~~~\sum_{ij}\left(e_{ij}\right)^2$
+
+.small[
+.container-grid[
+.row[
+.col-3[Variabilité totale]
+.col-1[=]
+.col-3[Variabilité interclasse (_between group_)] 
+.col-1[+]
+.col-3[Variabilité interclasse (_whithin group_)]
+]]
+]
+
+.container-grid[
+.row[
+.col-3[SS<sub>T</sub>]
+.col-1[=]
+.col-3[SS<sub>F</sub>] 
+.col-1[+]
+.col-3[SS<sub>R</sub>]
+]]
+
+
+Test : à quel point SS<sub>F</sub> est plus grande que SS<sub>R</sub> ? 
+(.small[Plus il y a de groupes/observations, plus les valeurs risques d'être élevées !])
+
+<i class = "fas fa-arrow-circle-right"></i> Il faut normaliser avec les_ __degrés de libertés__ (_df_)!
+
+.pull-left[
+$$CM_{F} = \frac{SS_F}{I - 1}$$
+]
+
+.pull-right[
+$$CM_{R} = \frac{SS_R}{n - (I - 1) - 1}$$
+]
+
+---
+
+# Dans R
+
+```{r}
+options(contrasts=c("contr.sum","contr.sum"))
+mod = lm(Sepal.Length ~ Species, data = iris)
+anova(mod)
+```
+
+---
+
+# Test de l'effet d'une variable
+
+__Hypothèse__ :
+
+_H<sub>0</sub>_ : $\alpha_i = 0,~~ \forall~~i$, tous les coefficients sont égaux, donc nuls
+
+_H<sub>1</sub>_ : $\exists~~ \alpha_i \neq$ 0, un coefficient au moins n'est pas nul
+
+__Statistique de test__ :
+
+$$F_{obs} = \frac{CM_F}{CM_R}$$
+
+__Sous _H<sub>0</sub>___ :
+
+$$F_{obs} \rightarrow F_{n-I}^{I-1}$$
+
+---
+
+# Test de l'effet d'une variable
+
+.container-grid[
+.row[
+.col-6[
+```{r echo = FALSE, dpi = 150, out.width = "100%", fig.width = 6}
+f <- qf(0.95, 6, 8)
+d <- df(f, 6, 8)
+tibble(
+  x = seq(0, 5, 0.001),
+  y = df(x = x, 6, 8)
+) %>% 
+  ggplot() +
+  aes(x = x, y = y) +
+  geom_line() +
+  theme_bw() +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.7)) +
+  scale_x_continuous(expand = c(0, 0), limits = c(-0.2, 5.02)) +
+  theme(axis.title = element_blank(),
+        panel.grid = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(size = 0.5)) +
+  annotate("text", x = 3, y = 0.6, label = "Loi~de~F[obs]~sous~H[0]~(F[n-I]^{I-1})", size = 8, parse  = TRUE) +
+  geom_segment(aes(x = f, xend = f, y = 0, yend = d)) +
+  geom_segment(aes(x = 0, xend = f, y = 0.005, yend = 0.005), color = viridis(3)[1],
+               arrow = arrow(ends = "both", type = "closed", length = unit(0.05, "inches"))) +
+  geom_segment(aes(x = f, xend = 5, y = 0.005, yend = 0.005), color = viridis(3)[2],
+               arrow = arrow(ends = "both", type = "closed", length = unit(0.05, "inches"))) +
+  annotate("text", x = 4.1, y = 0.015, label = "Rejet~de~H[0]", size = 4, color = viridis(3)[2], parse = TRUE) +
+  annotate("text", x = 1.7, y = 0.015, label = "Acceptation~de~H[0]", size = 4, color = viridis(3)[1], parse = TRUE) +
+  annotate("text", x = 4, y = 0.07, label = "alpha", size = 5, color = viridis(3)[2], parse = TRUE) +
+  annotate("text", x = 1, y = 0.3, label = "1 - alpha", size = 5, color = viridis(3)[1], parse = TRUE) +
+  geom_segment(aes(x = 4, xend = 3.8, y = 0.065, yend = 0.015), color = viridis(3)[2],
+               arrow = arrow(ends = "last", type = "closed", length = unit(0.05, "inches"))) 
+  
+```
+]
+.col-6[.small[
+#### Règle de décision
+
+$F_{obs} < F_{n-I}^{I-1}(1-\alpha) \Rightarrow$ acceptation de $H_0$
+
+$F_{obs} \geq F_{n-I}^{I-1}(1-\alpha) \Rightarrow$ rejet de $H_0$
+]
+]
+]
+]
+
+---
+
+# Dans R
+
+```{r}
+options(contrasts=c("contr.sum","contr.sum"))
+mod = lm(Sepal.Length ~ Species, data = iris)
+anova(mod)
+```
+
+```{r eval = FALSE}
+pf(119.26, 2, 147, lower.tail = FALSE)
+```
+
+
+---
+
+# Exemples avec plus de facteurs
+
+```{r}
+library(agricolae)
+data(greenhouse)
+data <- greenhouse$greenhouse1
+mod <- lm(weight ~ variety*method, data = data)
+anova(mod)
+```
+
+---
+
+## Summary
+
+.small[
+
+Énormément d'information donné par le `summary()` !!!
+
+
+```{r}
+summary(mod)
+```
+]
+
+---
+
+## Tests post-hoc (comparaisons multiples)
+
+```{r}
+library(emmeans)
+pairs(emmeans(mod, ~method))
+```
+
+---
+
+## Tests post-hoc (comparaisons multiples)
+
+.small[
+```{r}
+pairs(emmeans(mod, ~variety|method))
+```
+]
+---
 
 attention p-value!!! (exemple piège)
 
-autres exmples avec plus facteurs
-
-tests des coeffcients
-
-tests post-hoc
-
-exercices
-
+exercices --> 2 retrouver valeurs tableau d'analyse sur iris + analyse cow
 
 ---
 class: inverse, middle, center
