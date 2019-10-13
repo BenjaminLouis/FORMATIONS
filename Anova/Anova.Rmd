@@ -503,38 +503,78 @@ pairs(emmeans(mod, ~variety|method))
 ]
 ---
 
-attention p-value!!! (exemple piège)
-
-exercices --> 2 retrouver valeurs tableau d'analyse sur iris + analyse cow
+# .orange[<i class = "fas fa-exclamation-triangle"></i>] p-value !!! 
 
 ---
-class: inverse, middle, center
+class: inverse
 
-# Anova dans le cas particulier d'un alpha-plan
+# Exercice 1 
 
----
-
-# Définition
-
+Retrouver les valeurs du tableau d'analyse du jeu de données iris
 
 ---
+class: inverse
 
-# Particularités
+# Exercice 2 
+
+Analyse du fichier _cow.csv_
 
 
 ---
 
-# Dans R : estimation
+# Correction exercice 1
 
+.small[
+```{r}
+# Groupe
+i <- length(unique(iris$Species))
+# Observation
+n <- nrow(iris)
+# Mu
+mu <- pull(iris, Sepal.Length) %>% mean()
+# Coef
+dtalpha <- iris %>% 
+  group_by(Species) %>% 
+  summarize(alphas = mean(Sepal.Length) - mu)
+# SS du facteur
+SSF <- (n/i)*sum(pull(dtalpha, alphas)^2)
+# Residu
+dt <- left_join(iris, dtalpha, by = "Species") %>% 
+  mutate(preds = mu + alphas) %>% 
+  mutate(e = preds - Sepal.Length)
+# SS residuel
+SSR <- sum(pull(dt, e)^2)
+# Carrée moyens
+CMF <- SSF/(i - 1)
+CMR <- SSR/(n - i)
+# Stat de test
+Fobs <- CMF/CMR
+# p-value
+pval <- pf(Fobs, i - 1, n - i, lower.tail = FALSE)
+
+```
+]
 
 ---
+ 
+# Correction exercice 1
 
-# Dans R :  tests post-hoc
+.small[
+```{r}
+tibble(
+  Df = c(i - 1, n - i),
+  SS = c(SSF, SSR),
+  CM = c(CMF, CMR),
+  F = c(Fobs, NA),
+  p = c(pval, NA)
+)
+```
 
----
+```{r}
+mod <- lm(Sepal.Length~Species, data = iris)
+anova(mod)
+```
 
-# Exercices
 
-
-
-
+]
+ 
