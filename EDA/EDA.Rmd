@@ -468,6 +468,8 @@ class: inverse
 
 # Exercice
 
+Testez-vous sur des jeux de données de votre choix : `iris`, `mtcars`, `starwars`, ...
+
 ---
 
 # References
