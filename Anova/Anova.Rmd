@@ -15,6 +15,8 @@ output:
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+library(knitr)
+library(kableExtra)
 library(ggplot2)
 library(tibble)
 library(readr)
@@ -485,6 +487,42 @@ summary(mod)
 
 ---
 
+# Vérification hypothèses
+
+```{r fig.asp = 0.8, fig.align = "center"}
+plot(mod, which = 2)
+```
+
+
+---
+
+# Vérification hypothèses
+
+
+
+```{r fig.asp = 0.8, fig.align = "center"}
+plot(mod, which = 1)
+```
+
+---
+
+# Vérification hypothèses
+
+
+```{r fig.asp = 0.8, fig.align = "center"}
+qplot(x = data$variety, y = residuals(mod), geom = "point")
+```
+
+---
+
+# Vérification hypothèses
+
+
+```{r fig.asp = 0.8, fig.align = "center"}
+qplot(x = data$method, y = residuals(mod), geom = "point")
+```
+---
+
 ## Tests post-hoc (comparaisons multiples)
 
 ```{r}
@@ -503,7 +541,54 @@ pairs(emmeans(mod, ~variety|method))
 ]
 ---
 
-# .orange[<i class = "fas fa-exclamation-triangle"></i>] p-value !!! 
+## .orange[<i class = "fas fa-exclamation-triangle"></i>] p-value !!! 
+
+#### Tableau d'Anova
+
+```{r echo = FALSE}
+tibble("x" = "p-value", fongicide = 0.0500205, 'variété' = 6.926e-4, interaction = 0.231347) %>% 
+  kable(format = "html", col.names = c("", "fongicide", "variete", "interaction")) %>% 
+  kable_styling()
+```
+
+.pull-left[
+#### Comparaisons fongicides
+
+```{r echo = FALSE}
+tibble("x" = "F1-F2", Estimate = 9.81, 'p-value' = 0.0500205) %>% 
+  kable(format = "html", col.names = c("", "Estimate", "p-value")) %>% 
+  kable_styling()
+```
+]
+
+.pull-right[
+#### Comparaisons variétés
+
+```{r echo = FALSE}
+tibble("x" = c("V1-V2", "V1-V3", "V2-V3"), Estimate = c(2.58, 3.36, 0.78), 
+       'p-value' =c(0.0284387, 0.0173694, 0.1120579)) %>% 
+  kable(format = "html", col.names = c("", "Estimate", "p-value")) %>% 
+  kable_styling()
+```
+]
+
+<br/>
+<br/>
+.big[Quelles conclusions peut-on faire de ces résultats ?]
+
+---
+
+## .orange[<i class = "fas fa-exclamation-triangle"></i>] p-value !!! 
+
+.big[
++ Les _p-value_ dépendent de la qualité ET de la quantité des données !
+
++ Le seuil de 0.05 est arbitraire !
+
++ Les résultats des tests statistiques ne sont pas la fin de l'analyse. Il est important de prendre du recul et d'évaluer la qualité des résultats !
+
++ Les résultats des tests ne consituent pas des conclusions/décisions ! Ce sont des outils qui aident les experts à conclure/décider !
+]
 
 ---
 class: inverse
@@ -517,7 +602,9 @@ class: inverse
 
 # Exercice 2 
 
-Analyse du fichier _cow.csv_
+Analyse du fichier _cow.csv_ : mesure de rendement de production laitière par différentes vaches. Les vaches ont reçu soit la ration R1, soit la ration R2 de nourriture et sont à des âges différents (1ère, 2ème, 3ème ou 4ème lactation).
+
+Existe t-il une inlfuence de la ration et/ou de la lactation sur la production de lait ?
 
 
 ---
@@ -577,4 +664,131 @@ anova(mod)
 
 
 ]
+
+
+---
+
+# Correction exercice 2
+
+
+```{r message = FALSE, warning = FALSE}
+library(readr)
+library(ggplot2)
+library(emmeans)
+library(dplyr)
+data <- read_delim(here::here("static/data/cows.csv"), delim = ";")
+summary(data)
+```
+
+
+---
+
+# Correction exercice 2
+
+
+```{r fig.asp = 0.8}
+ggplot(data) +
+  aes(x = lactation, y = yield, color = ration) +
+geom_point()
+```
+
+
+
+---
+
+# Correction exercice 2
+
+
+```{r}
+mod <- lm(yield ~ ration + lactation + ration:lactation, data = data)
+anova(mod)
+```
+
+---
+
+# Correction exercice 2
+
+.small[
+```{r}
+summary(mod)
+```
+] 
  
+---
+class: wider
+
+.small[
+ 
+.container-grid[
+.row[
+.col-5[
+```{r out.width = "50%", fig.align = "center"}
+plot(mod, which = 2)
+```
+]
+.col-1[]
+.col-5[
+```{r out.width = "50%", fig.align = "center"}
+plot(mod, which = 1)
+```
+]
+]
+.row[
+.col-5[
+```{r out.width = "50%", fig.align = "center"}
+qplot(x = data$ration, 
+      y = residuals(mod), 
+      geom = "point")
+```
+]
+.col-1[]
+.col-5[
+```{r out.width = "50%", fig.align = "center"}
+qplot(x = data$lactation, 
+      y = residuals(mod), 
+      geom = "point")
+```
+]
+]
+]
+
+]
+
+---
+
+# Correction exercice 2
+
+.small[
+```{r}
+library(emmeans)
+pairs(emmeans(mod,~ration))
+```
+
+
+```{r}
+pairs(emmeans(mod,~lactation))
+```
+
+]
+
+---
+
+# Correction exercice 2
+
+.small[
+```{r}
+pairs(emmeans(mod,~ration|lactation))
+```
+
+]
+
+---
+
+# Correction exercice 2
+
+.small[
+```{r}
+pairs(emmeans(mod,~lactation|ration))
+```
+
+]
