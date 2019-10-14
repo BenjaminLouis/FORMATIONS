@@ -131,6 +131,9 @@
   margin-left: 100%;
 }
 
+.remark-code-line-highlighted {
+    background-color: rgb(51, 51, 51);
+}
 
 
 /* INLINE CODE */
@@ -249,16 +252,28 @@ th, td {
   padding: 1em 1em 1em 1em;
 }
 
+.box{
+padding: 10px;
+}
+
+.box p {
+  margin-top: 13.5px;
+  margin-bottom: 13.5px;
+  line-height: 26px;
+}
+
 /* Couleur */
 .green {
   color: rgb(0, 128, 0);
 }
-
 .orange {
   color: orange;
 }
 .red {
   color: red;
+}
+.white {
+  color: white;
 }
 
 .boxgreen {
