@@ -1,0 +1,121 @@
+---
+title: 'Références'
+author: "Benjamin Louis"
+date: "16/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
+output:
+  xaringan::moon_reader:
+    css: [default, default-fonts, "../static/css/custom.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: agate
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+# R For Data Science
+
+.pull-left[
+<img src="../static/img/r4ds.jpg", width = "90%"></img>
+]
+
+.pull-right[
+#### Disponible gratuitement en ligne
+
+[https://r4ds.had.co.nz/](https://r4ds.had.co.nz/)
+]
+
+
+---
+
+# Advanced R
+
+.pull-left[
+<img src="../static/img/advancedr.jpg", width = "90%"></img>
+]
+
+.pull-right[
+#### Disponible gratuitement en ligne
+
+[http://adv-r.had.co.nz/](http://adv-r.had.co.nz/)
+]
+
+---
+
+# ggplot2
+
+.pull-left[
+<img src="../static/img/ggplot2.jpg", width = "90%"></img>
+]
+
+.pull-right[
+#### Disponible gratuitement en ligne
+
+[https://ggplot2-book.org/](https://ggplot2-book.org/)
+]
+
+
+---
+
+# R Markdown : The definitive guide
+
+.pull-left[
+<img src="../static/img/rmarkdown-guide.jpg", width = "90%"></img>
+]
+
+.pull-right[
+#### Disponible gratuitement en ligne
+
+[https://bookdown.org/yihui/rmarkdown/](https://bookdown.org/yihui/rmarkdown/)
+]
+
+---
+
+# R packages
+
+.pull-left[
+<img src="../static/img/rpackages.jpg", width = "90%"></img>
+]
+
+.pull-right[
+#### Disponible gratuitement en ligne
+
+[http://r-pkgs.had.co.nz/](http://r-pkgs.had.co.nz/)
+]
+
+
+---
+
+# Statistiques générales pour utilisateurs
+
+.pull-left[
+<img src="../static/img/statgen1.jpg", width = "90%"></img>
+]
+
+.pull-right[
+<img src="../static/img/statgen2.jpg", width = "90%"></img>
+]
+
+
+---
+
+# Websites
+
+CRAN : [https://cran.r-project.org/](https://cran.r-project.org/)
+
+Rstudio : [http://www.rstudio.com](http://www.rstudio.com)
+
+Site des packages
+
+Blogs (ThinkR, masalmon, Rbloggers)
+
+---
+
+# Trouver de l'aide
+
+Abcd’R - [https://abcdr.guyader.pro/](https://abcdr.guyader.pro/)
+
+Cross validated - [https://stats.stackexchange.com/](https://stats.stackexchange.com/)
+
+Slack grrr - [https://kutt.it/rgrrr](https://kutt.it/rgrrr)
+
+Moi-même - [contact@benjaminlouis-stat.fr](contact@benjaminlouis-stat.fr) / [www.benjaminlouis-stat.fr](www.benjaminlouis-stat.fr)
