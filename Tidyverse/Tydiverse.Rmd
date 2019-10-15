@@ -6,6 +6,7 @@ output:
   xaringan::moon_reader:
     css: [default, default-fonts, "../static/css/custom.css"]
     lib_dir: libs
+    chakra: "../libs/remark-latest.min.js"
     nature:
       highlightStyle: agate
       highlightLines: true
@@ -777,7 +778,7 @@ class: inverse
 
 Dans un script :
 
-```{r message = FALSE, warning = FALSE, eval = FALSE}
+```{r message = FALSE, warning = FALSE}
 library(tidyr)
 library(dplyr)
 who <- who %>% 

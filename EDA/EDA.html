@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Analyse exploratoire des données</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Benjamin Louis" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../static/css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Analyse exploratoire des données
+## Faire connaissance avec ses données
+### Benjamin Louis
+### 16/10/2019 (MàJ: 15/10/2019)
+
+---
+
+
+
+
+# Analyse exploratoire
+
+
++ .orange[&lt;i class="fas fa-exclamation-triangle"&gt;&lt;/i&gt;] __Part essentielle de toute analyse !!!__
+
++ .orange[&lt;i class="fas fa-exclamation-triangle"&gt;&lt;/i&gt;] __À effectuer en premier !!!__
+
+.center[
+&lt;img src="../static/img/data-science.png" width="50%"&gt;
+]
+
++ __Objectifs__ :
+
+  + Vérifier la qualité des données (données aberrantes, manquantes, ...)
+  + Vérifier le besoin de transformer les données
+  + Observer la variation/covariation des données
+  + Générer des questions/hypothèses sur les données
+
+.footnote[
+Image : [https://r4ds.had.co.nz/introduction.html](https://r4ds.had.co.nz/introduction.html)
+]
+
+---
+
+# Analyse exploratoire
+
++ Pas de règles formelles
+
++ Toute question est bonne
+
++ Trois phases importantes :
+
+  + Généralités sur les jeu de données
+  
+  + Variation des variables
+  
+  + Covariation des variables
+  
+
+---
+class: inverse, middle, center
+
+# Généralités sur le jeu de données
+
+---
+
+# Objectifs
+
++ Premier contact
+
++ Dimension du jeu de données
+
++ Type des variables
+
++ _tidy data_ ?
+
++ Données manquantes
+
++ Données avec beaucoup de 0
+
++ Données avec valeurs infinies
+
+---
+
+# Dans la console
+
+
+```r
+msleep
+```
+
+```
+## # A tibble: 83 x 11
+##    name  genus vore  order conservation sleep_total sleep_rem sleep_cycle
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Chee… Acin… carni Carn… lc                  12.1      NA        NA    
+##  2 Owl … Aotus omni  Prim… &lt;NA&gt;                17         1.8      NA    
+##  3 Moun… Aplo… herbi Rode… nt                  14.4       2.4      NA    
+##  4 Grea… Blar… omni  Sori… lc                  14.9       2.3       0.133
+##  5 Cow   Bos   herbi Arti… domesticated         4         0.7       0.667
+##  6 Thre… Brad… herbi Pilo… &lt;NA&gt;                14.4       2.2       0.767
+##  7 Nort… Call… carni Carn… vu                   8.7       1.4       0.383
+##  8 Vesp… Calo… &lt;NA&gt;  Rode… &lt;NA&gt;                 7        NA        NA    
+##  9 Dog   Canis carni Carn… domesticated        10.1       2.9       0.333
+## 10 Roe … Capr… herbi Arti… lc                   3        NA        NA    
+## # … with 73 more rows, and 3 more variables: awake &lt;dbl&gt;, brainwt &lt;dbl&gt;,
+## #   bodywt &lt;dbl&gt;
+```
+
+---
+
+### `summary()`
+
+.lesssmall[
+
+```r
+summary(msleep)
+```
+
+```
+##      name              genus               vore          
+##  Length:83          Length:83          Length:83         
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+##                                                          
+##                                                          
+##     order           conservation        sleep_total      sleep_rem    
+##  Length:83          Length:83          Min.   : 1.90   Min.   :0.100  
+##  Class :character   Class :character   1st Qu.: 7.85   1st Qu.:0.900  
+##  Mode  :character   Mode  :character   Median :10.10   Median :1.500  
+##                                        Mean   :10.43   Mean   :1.875  
+##                                        3rd Qu.:13.75   3rd Qu.:2.400  
+##                                        Max.   :19.90   Max.   :6.600  
+##                                                        NA's   :22     
+##   sleep_cycle         awake          brainwt            bodywt        
+##  Min.   :0.1167   Min.   : 4.10   Min.   :0.00014   Min.   :   0.005  
+##  1st Qu.:0.1833   1st Qu.:10.25   1st Qu.:0.00290   1st Qu.:   0.174  
+##  Median :0.3333   Median :13.90   Median :0.01240   Median :   1.670  
+##  Mean   :0.4396   Mean   :13.57   Mean   :0.28158   Mean   : 166.136  
+##  3rd Qu.:0.5792   3rd Qu.:16.15   3rd Qu.:0.12550   3rd Qu.:  41.750  
+##  Max.   :1.5000   Max.   :22.10   Max.   :5.71200   Max.   :6654.000  
+##  NA's   :51                       NA's   :27
+```
+]
+
+---
+class: inverse, middle, center
+
+# Variations
+
+---
+
+# Objectifs
+
++ Distribution des données
+
++ Quelles sont les valeurs les plus typiques ?
+
++ Quelles sont les données rares ? 
+
++ Données aberrantes ou juste rares ?
+
++ Tester la qualité des données 
+
+---
+
+### Variables quantitatives : histogramme .green[&lt;i class="fas fa-thumbs-up"&gt;&lt;/i&gt;]
+
+
+
+```r
+ggplot(msleep) +
+  aes(x = sleep_total) +
+  geom_histogram(binwidth = 2, color = "white") +
+  geom_freqpoly(binwidth = 2, color = "blue")
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+### Variables quantitatives : boxplot .orange[&lt;i class="fas fa-exclamation-triangle"&gt;&lt;/i&gt;]
+
+
+
+```r
+ggplot(msleep) +
+  aes(y = sleep_total) +
+  geom_boxplot() +
+  xlim(-1, 1)
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+### Variables qualitatives : barplot .green[&lt;i class="fas fa-thumbs-up"&gt;&lt;/i&gt;]
+
+
+
+```r
+ggplot(msleep) +
+  aes(x = vore, fill = vore) +
+  geom_bar(show.legend = FALSE)
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Variables qualitatives : pie plot .red[&lt;i class="fas fa-thumbs-down"&gt;&lt;/i&gt;] .red[&lt;i class="fas fa-thumbs-down"&gt;&lt;/i&gt;] .red[&lt;i class="fas fa-thumbs-down"&gt;&lt;/i&gt;]
+
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, middle, center
+
+# Covariations
+
+---
+
+# Objectifs
+
++ Existe t-il des relatoins entre les variables ?
+
++ Les relations observées sont-elles attendues ?
+
++ Existe t-il de l'information redondante ?
+
+---
+
+### Quantitative ~ Qualitative : histogrammes/freqpoly
+
+
+.pull-left[
+.red[&lt;i class="fas fa-thumbs-down"&gt;&lt;/i&gt;] Groupes de taille différente
+.small[
+
+```r
+ggplot(msleep) +
+  aes(x = sleep_total, color = vore) +
+  geom_freqpoly(binwidth = 4)
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+]
+]
+
+.pull-right[
+.green[&lt;i class="fas fa-thumbs-up"&gt;&lt;/i&gt;] Comparaison densité
+.small[
+
+```r
+ggplot(msleep) +
+  aes(x = sleep_total, color = vore, 
+      y = ..density..) +
+  geom_freqpoly(binwidth = 4)
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+]
+]
+
+---
+
+### Quantitative ~ Qualitative : boxplot .orange[&lt;i class="fas fa-exclamation-triangle"&gt;&lt;/i&gt;]
+
+
+
+```r
+ggplot(msleep) +
+  aes(x = vore, y = sleep_total,
+      color = vore) +
+  geom_boxplot()
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Quantitative ~ Qualitative : violin plot .green[&lt;i class="fas fa-thumbs-up"&gt;&lt;/i&gt;]
+
+
+
+```r
+ggplot(msleep) +
+  aes(x = vore, y = sleep_total,
+      color = vore) +
+  geom_violin(draw_quantiles = 0.5, trim = FALSE)
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Quantitative ~ Qualitative : bar-barplot .red[&lt;i class="fas fa-thumbs-down"&gt;&lt;/i&gt;]
+
+_bar-barplot_ : barplot des valeurs moyennes et écart-type
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+.footnote[
+cf [https://thinkr.fr/les-pieges-de-la-representation-de-donnees/](https://thinkr.fr/les-pieges-de-la-representation-de-donnees/)
+]
+
+
+---
+
+### Quantitative ~ Quantitative : scatter plot .green[&lt;i class="fas fa-thumbs-up"&gt;&lt;/i&gt;]
+
+
+
+```r
+ggplot(msleep) +
+  aes(x = sleep_rem, y = sleep_total) +
+  geom_point(size = 3)
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+### Qualitative ~ Qualitative : geom_count() .green[&lt;i class="fas fa-thumbs-up"&gt;&lt;/i&gt;]
+
+
+
+```r
+ggplot(msleep) +
+  aes(x = vore, y = conservation) +
+  geom_count()
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Qualitative ~ Qualitative : geom_tile() .green[&lt;i class="fas fa-thumbs-up"&gt;&lt;/i&gt;]
+
+
+
+```r
+msleep %&gt;% 
+  count(vore,conservation) %&gt;% 
+  ggplot() +
+  aes(x = vore, y = conservation) +
+  geom_tile(aes(fill = n))
+```
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, middle, center
+
+# Données aberrantes
+
+---
+
+
+# Définition
+
++ Outliers
+
++ Valeurs distantes des autres observations
+
++ Contraste
+
++ Analyse exploratoire aide à les détecter
+
++ Des tests statistiques existent
+
++ Leur sort dépend uniquement de l'expertise !!!
+
+---
+
+## boxplot
+
+
+&lt;img src="EDA_files/figure-html/unnamed-chunk-15-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## boxplot
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Récupérer les outliers
+
+
+```r
+msleep %&gt;% 
+  filter(sleep_rem %in% boxplot.stats(sleep_rem)$out)
+```
+
+```
+## # A tibble: 3 x 11
+##   name  genus vore  order conservation sleep_total sleep_rem sleep_cycle
+##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Nort… Dide… omni  Dide… lc                  18         4.9       0.333
+## 2 Thic… Lutr… carni Dide… lc                  19.4       6.6      NA    
+## 3 Gian… Prio… inse… Cing… en                  18.1       6.1      NA    
+## # … with 3 more variables: awake &lt;dbl&gt;, brainwt &lt;dbl&gt;, bodywt &lt;dbl&gt;
+```
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Autres règles
+
+Parfois on trouve des règles plus conservatrices --&gt; `\(3 \times IQR\)` (au lieu de 1,5)
+
+
+```r
+msleep %&gt;% 
+  filter(sleep_rem %in% boxplot.stats(sleep_rem, coef = 3)$out)
+```
+
+.orange[&lt;i class="fas fa-exclamation-triangle"&gt;&lt;/i&gt;] Repose sur la loi normale
+
+---
+
+## Test de Grubbs
+
++ Package `outliers`
+
++ Test si une valeur extrême est un outlier
+
+.small[
+
+```r
+library(outliers)
+# Test pour valeur max
+grubbs.test(msleep$sleep_rem)
+```
+
+```
+## 
+## 	Grubbs test for one outlier
+## 
+## data:  msleep$sleep_rem
+## G = 3.6391, U = 0.7756, p-value = 0.003515
+## alternative hypothesis: highest value 6.6 is an outlier
+```
+
+```r
+# Test pour valeur min
+grubbs.test(msleep$sleep_rem, opposite = TRUE)
+```
+
+```
+## 
+## 	Grubbs test for one outlier
+## 
+## data:  msleep$sleep_rem
+## G = 1.36750, U = 0.96831, p-value = 1
+## alternative hypothesis: lowest value 0.1 is an outlier
+```
+]
+
+---
+
+# Packages utiles
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Généralités
+
++ `funModeling::df_status`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Variations/Covariations
+
++ `xray::distributions`
++ `skimr` : [https://ropensci.github.io/skimr/](https://ropensci.github.io/skimr/)
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Transversal
+
++  `visdat` : [http://visdat.njtierney.com/](http://visdat.njtierney.com/)
++ `summarytools` : [https://github.com/dcomtois/summarytools](https://github.com/dcomtois/summarytools)
++ `DataExplorer` : [https://boxuancui.github.io/DataExplorer/](https://boxuancui.github.io/DataExplorer/)
+
+---
+class: inverse
+
+# Exercice
+
+Testez-vous sur des jeux de données de votre choix : `iris`, `mtcars`, `starwars`, ...
+
+---
+
+# References
+
++ [https://www.data-to-viz.com/](https://www.data-to-viz.com/)
+
++ [https://statistique-et-logiciel-r.com/comment-detecter-les-outliers-avec-r/](https://statistique-et-logiciel-r.com/comment-detecter-les-outliers-avec-r/)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "agate",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

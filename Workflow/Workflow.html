@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>R, RStudio et workflow</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Benjamin Louis" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../static/css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R, RStudio et workflow
+## ou comment bien commencer son travail d’analyse
+### Benjamin Louis
+### MàJ: 15/10/2019
+
+---
+
+
+class: inverse, center, middle
+
+
+&lt;img src="../static/img/Rlogo.svg" width="200"&gt;
+
+
+
+---
+
+# C'est quoi R ?
+
++ Langage de programmation et environnement intégré pour la science des données
+
++ Développé dans les années 90 par Ross Ihaka et Robert Genleman
+
++ Depuis 1997 : _R-core team_ (internationale)
+
++ Logiciel libre et gratuit (_licence GNU GPL_)
+
++ Langage interprété exécutable pas à pas (ligne de code)
+
++ Version : 3.6.1 (05/07/2019)
+
++ Téléchargement sur le CRAN : [https://cran.r-project.org/](https://cran.r-project.org/)
+
+
+---
+
+
+.pull-left[
+
+# Forces
+
++ Libre et gratuit
+
++ Multiplateforme
+
++ Manipulation et visualisation de données
+
++ _On vient pour le langage, on reste pour la communauté !_
+
++ \&gt;10000 packages (ensemble de fonctions)
+
++ Couplage : SQL, WinBUGS, QGis, Excel, ...
+]
+
+.pull-right[
+
+#Faiblesses
+
++ Difficile à apprendre
+
++ Gestion de la mémoire (de moins en moins vrai)
+
++ Interface de base minimale
+]
+
+---
+class: inverse, center, middle
+
+&lt;img src="../static/img/RStudio-Logo.svg" width="400"&gt;
+
+
+---
+
+# RStudio
+
++ Entreprise fondée par J.J. Allaire en 2009 
+
++ Création de produits libres (et gratuits) ainsi que des services
+
++ 2011 : RStudio IDE, interface utilisateur ergonomique, configurable et intégrant de nombreux outils utiles
+
++ Téléchargement :  [http://www.rstudio.com](http://www.rstudio.com)
+
+.center[
+&lt;img src="../static/img/rstudio.png" width="400"&gt;
+]
+
+
+---
+
+# Session, environnement et assignation
+
+Une session de travail R commence à l’ouverture de R/RStudio et se termine à sa fermeture.
+
+on __assigne__ un nom à des objets ou des valeurs à l'aide de `&lt;-`
+
+
+```r
+ma_variable1 &lt;- 1
+ma_variable2 &lt;- "Hello"
+ma_variable3 &lt;- TRUE
+ma_variable4 &lt;- 2/3
+```
+
+On peut lister les objets crées avec la fonction `ls()`
+
+
+```r
+ls()
+```
+
+```
+## [1] "ma_variable1" "ma_variable2" "ma_variable3" "ma_variable4"
+```
+
+Ou en regardant l'onglet _Environment_ dans RStudio.
+
+---
+
+# Projet RStudio
+
+#### _Working directory_
+
++ R comprend la notion de dossier de travail où il va chercher/sauvegarder des fichiers.
+
+
+```r
+getwd()
+```
+
+```
+## [1] "/home/benjamin/MEGA/PRO - Statisticien Independant/GIT PROJECTS/FORMATIONS/Workflow"
+```
+
++ Chemins d'accès dépendent du système d'exploitation, de l'organisation des dossiers, ...
+
+#### vs _RStudio project_ 
+ 
++ Construction d'espaces de travail portables et partageables
+
++ Premier pas vers la reproductibilité !
+
+.center[
+`File --&gt; New project`
+]
+
+
+---
+
+# Organiser son projet
+
+.tree[
+
+```
+## /home/benjamin/MEGA/PRO - Statisticien Independant/GIT PROJECTS/FORMATIONS/static/mon_projet
+## ├── R
+## │   ├── 1-exploratory_analysis.R
+## │   └── 2-statistics_analysis.R
+## ├── data
+## │   └── processed-data.csv
+## ├── data-raw
+## │   ├── data-raw-processing.R
+## │   └── data-raw.csv
+## ├── docs
+## │   └── protocol.docx
+## ├── mon_projet.Rproj
+## └── reports
+##     └── my_reports.Rmd
+```
+]
+
+
+---
+
+# Package `{here}`
+
+
+```r
+library(here)
+here()
+```
+
+```
+## here() starts at /home/benjamin/MEGA/PRO - Statisticien Independant/GIT PROJECTS/FORMATIONS
+```
+
+```
+## [1] "D:/[...]/static/mon_projet"
+```
+
+
+
+```r
+here("R")
+```
+
+```
+## [1] "D:/[...]/static/mon_projet/R"
+```
+
+
+```r
+here("data-raw", "data-raw-processing.R")
+```
+
+
+```
+## [1] "D:/[...]/static/mon_projet/data-raw/data-raw-processing.R"
+```
+
+---
+
+# Conseil !
+
+.center[
+&lt;img src="../static/img/nordata.jpg" width="500"&gt;
+]
+
+---
+
+# Raccourcis clavier
+
+.center[
+`Alt + Shift + K`
+]
+
+.center[
+&lt;img src="../static/img/shortcuts.png" width="650"&gt;
+]
+
+
+---
+class: inverse, center, middle
+
+# Script R
+
+---
+
+# Script R
+
++ Permet d'enregistrer l'ensemble du code nécessaire pour mener une analyse
+
++ Console = expérimentation __vs__ Script = sauvegarde
+
++ Créer un nouveau script :
+
+.center[
+`File --&gt; New file --&gt; R Script` ou `Ctrl + Shift + N`
+]
+
++ Lancer la ligne de code active ou l'ensemble des lignes de code sélectionnées : `Ctrl + Enter`
+
++ Lancer l'ensemble du script : `Ctrl + Shift + S`
+
++ Ligne de commentaire commence par `#`
+
+---
+
+# Script R : quelques conseils
+
++ Commencer par une description sous forme de commentaire
+
++ Mettre l'ensemble des packages nécessaires en début de script
+
++ Ne jamais commencer par `rm(list = ls())` ni `setwd()` ([https://www.tidyverse.org/articles/2017/12/workflow-vs-script/](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/))
+
++ Utiliser des commentaires 
+
++ Attention aux scripts trop longs : scinder l'analyse en plusieurs scripts (`source()`)
+
++ Utiliser un style cohérent ([http://stat405.had.co.nz/r-style.html](http://stat405.had.co.nz/r-style.html))
+
++ Éviter les copier-coller --&gt; automatiser avec des fonctions !
+
++ Ne pas hésiter à confronter votre code à des collègues !
+
+---
+class: inverse
+
+# Exercices
+
++ Ouvrir une session R via RStudio
+
++ Créer un projet RStudio et lui donner un nom
+
++ Créer un premier script
+
++ Donner une description au script (e.g. _"Premier script d'exerice...."_)
+
++ Ne pas oublier de sauvergarder !!!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "agate",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

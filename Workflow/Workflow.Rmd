@@ -2,11 +2,12 @@
 title: "R, RStudio et workflow"
 subtitle: "ou comment bien commencer son travail d'analyse"
 author: "Benjamin Louis"
-date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
+date: "MàJ: `r format(Sys.Date(), '%d/%m/%Y')`"
 output:
   xaringan::moon_reader:
     css: [default, default-fonts, "../static/css/custom.css"]
     lib_dir: libs
+    chakra: libs/remark-latest.min.js
     nature:
       highlightStyle: agate
       highlightLines: true
@@ -32,7 +33,7 @@ library(kableExtra)
 
 + Développé dans les années 90 par Ross Ihaka et Robert Genleman
 
-+ Depui 1997 : _R-core team_ (internationale)
++ Depuis 1997 : _R-core team_ (internationale)
 
 + Logiciel libre et gratuit (_licence GNU GPL_)
 
@@ -58,7 +59,7 @@ library(kableExtra)
 
 + _On vient pour le langage, on reste pour la communauté !_
 
-+ $>10000$ packages (ensemble de fonction)
++ \>10000 packages (ensemble de fonctions)
 
 + Couplage : SQL, WinBUGS, QGis, Excel, ...
 ]
@@ -84,11 +85,11 @@ class: inverse, center, middle
 
 # RStudio
 
-+ Entreprise fondé par J.J. Allaire en 2009 
++ Entreprise fondée par J.J. Allaire en 2009 
 
 + Création de produits libres (et gratuits) ainsi que des services
 
-+ 2011 : RStdio IDE, interface utilisateur ergonomique, configurable et intégrant de nombreux outils utils
++ 2011 : RStudio IDE, interface utilisateur ergonomique, configurable et intégrant de nombreux outils utiles
 
 + Téléchargement :  [http://www.rstudio.com](http://www.rstudio.com)
 
@@ -243,7 +244,7 @@ class: inverse, center, middle
 
 + Utiliser des commentaires 
 
-+ Attention aux scripts trop long : scinder l'analyse en plusieurs scripts (`source()`)
++ Attention aux scripts trop longs : scinder l'analyse en plusieurs scripts (`source()`)
 
 + Utiliser un style cohérent ([http://stat405.had.co.nz/r-style.html](http://stat405.had.co.nz/r-style.html))
 
