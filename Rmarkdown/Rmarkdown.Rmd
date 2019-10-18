@@ -125,6 +125,19 @@ class: inverse, center, middle
 # YAML
 
 ---
+
+# Métadonnées du document
+
+```markdown
+---
+title: "Mon premier rapport Rmarkdown"
+author: "Moi-même"
+date: "17/10/2019"
+output: html_document
+---
+```
+
+---
 class: center, middle
 
 .white[<img src = "../static/img/Markdown-mark.svg" width = "40%">] 

@@ -299,7 +299,7 @@ ggplot(msleep) +
 ### Qualitative ~ Qualitative : geom_tile() .green[<i class="fas fa-thumbs-up"></i>]
 
 
-```{r fig.asp = 0.8, fig.align = "center", warning = FALSE}
+```{r fig.asp = 0.8, fig.align = "center", warning = FALSE, out.width = "50%"}
 msleep %>% 
   count(vore,conservation) %>% 
   ggplot() +
@@ -334,7 +334,7 @@ class: inverse, middle, center
 ## boxplot
 
 
-```{r echo = FALSE, fig.align = "center", out.width = "90%", dpi = 150}
+```{r echo = FALSE, fig.align = "center", out.width = "70%", dpi = 150}
 ggplot_box_legend <- function(family = "serif"){
   set.seed(100)
   sample_df <- data.frame(parameter = "test", values = sample(500))

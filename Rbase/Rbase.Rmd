@@ -17,7 +17,7 @@ class: inverse, center, middle
 
 <img src="../static/img/Rlogo.svg" width="200">
 
-```{r setup, echo = FALSE}
+```{r setup, echo = FALSE, message = FALSE, warning  = FALSE, error = FALSE}
 library(magrittr)
 library(knitr)
 library(kableExtra)
@@ -407,7 +407,7 @@ class: inverse
 
 + Tester la fonction sur les vecteurs précédemment créés
 
-Fonctions utiles : `mean()`, `sd()`, `unique()`, `is.numeric()`, `is.factor()`, `is.charcater()`, `is.logical()`
+Fonctions utiles : `mean()`, `sd()`, `unique()`, `is.numeric()`, `is.factor()`, `is.character()`, `is.logical()`
 
 ---
 

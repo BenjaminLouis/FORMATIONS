@@ -149,7 +149,7 @@ FactoMineR::AovSum()
 .col-5[]
 ]]
 
-```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8, out.width = "90%"}
 set.seed(7)
 iris %>% 
   mutate(mu = mean(Sepal.Length, na.rm = TRUE),
@@ -187,7 +187,7 @@ iris %>%
 .col-5[]
 ]]
 
-```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8, out.width = "90%"}
 set.seed(7)
 iris %>% 
   mutate(mu = mean(Sepal.Length, na.rm = TRUE),
@@ -230,7 +230,7 @@ iris %>%
 .col-5[, .small[i = {.boxgreen[setosa]|.boxorange[versicolor]|.boxpurple[virginica]}]]
 ]]
 
-```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8, out.width = "90%"}
 set.seed(7)
 iris %>% 
   mutate(mu = mean(Sepal.Length, na.rm = TRUE),
@@ -282,7 +282,7 @@ iris %>%
 .col-5[, .small[i = {.boxgreen[setosa]|.boxorange[versicolor]|.boxpurple[virginica]}]]
 ]]
 
-```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8}
+```{r echo  = FALSE, dpi = 150, fig.asp = 0.65, fig.width = 8, out.width = "90%"}
 set.seed(7)
 iris %>% 
   mutate(mu = mean(Sepal.Length, na.rm = TRUE),
