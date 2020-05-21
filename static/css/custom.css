@@ -303,3 +303,15 @@ padding: 10px;
   border-radius: 4px;
   padding: 2px;
 }
+
+
+/****************************************************************
+
+                Remove default highlight.js style
+
+*****************************************************************/
+
+.hljs-code {
+    color: white !important;
+}
+
