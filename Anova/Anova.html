@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Analyse de la variance (anova)</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Benjamin Louis" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../static/css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Analyse de la variance (anova)
+## quantitatif ~ f(qualitatif)
+### Benjamin Louis
+### 16/10/2019 (MàJ: 18/11/2021)
+
+---
+
+
+
+
+# Définition et objetif
+
+__Modèle général__ :
+
+.center[
+
+`\(y_{ij...nr} = \mu + \alpha_{i} + \beta_{j} + ... + \gamma_{n} + ... + \alpha\beta_{ij} + ... + \beta\gamma_{jn} + \epsilon_{ij...nr}\)`
+
+`\(\epsilon_{ij...nr} \rightarrow N(0, \sigma^2)~~~~~~cov(\epsilon_{ij...nr},\epsilon_{i'j'...n'r'}) = 0\)`
+
+]
+
+
+.small[
++ `\(\mu\)` : intercept
++ `\(\alpha\)`, `\(\beta\)`, `\(\gamma\)` : variables qualitatives
++ `\(\alpha_{i}\)` : valeur pour la modalité `\(i\)` de la variable associée au paramètre `\(\alpha\)`
++ `\(\alpha\beta\)` : interaction entre `\(\alpha\)` et `\(\beta\)`
++ `\(\epsilon\)` : erreur résiduelle
+]
+
+__Objectif principal__ :
+
+Tester et étudier l'influence de variables qualitatives sur une variable numérique. 
+
+__Hypothèses__ :
+
+.small[
++ Sur les résidus
++ Sur les coefficients : `\(\alpha_{ref} = 0\)` ou `\(\sum_i\alpha_{i} = 0\)` 
+]
+
+---
+
+# Exemple
+
++ Expérimentation en plein champ avec I = 3 variétés différentes de blé et J = 2 types de fongicides
+
+&lt;br/&gt;
+
++ 54 parcelles : 9 répétitions pour chaque pair de variété et fongicide
+
+&lt;br/&gt;
+
++ Question : existe t-il des différences de rendement entre les variétés de blé et selon le fongicide utilisé ?
+
+&lt;br/&gt;
+
++ Model :
+.center[
+
+`\(rendement_{ijr} = \mu + \alpha_{variete = i} + \beta_{fongicide=j} + \alpha\beta_{variete = i,fongicide=j} + \epsilon_{ijr}\)`
+
+]
+
+---
+class: wider
+
+### Estimation par moindres carrés (modèle à 1 facteur !)
+
+.container-grid[
+.row[
+.col-5[
+.small[
+
+```r
+# Par défaut dans R
+#
+#
+```
+]
+]
+.col-1[]
+.col-5[
+.small[
+
+```r
+options(contrasts=c("contr.sum","contr.sum"))
+# ou
+FactoMineR::AovSum()
+```
+]
+]
+]
+.small[
+.row[
+.col-5[
++ `\(\hat{\mu} = \bar{y}_{i=ref}\)`
+
++ `\(\hat{\alpha}_{i=ref} = 0\\\hat{\alpha}_{i \neq ref} =  \bar{y}_{i \neq ref} - \mu\)`
+
+]
+.col-1[]
+.col-5[
++ `\(\hat{\mu} = \bar{y}\)`
+
++ `\(\hat{\alpha}_{i} =  \bar{y}_{i} - \mu\)`
+]
+]
+]
+]
+
+&lt;hr/&gt;
+
++ `\(\hat{y}_{ik} = \hat{\mu} + \hat{\alpha}_{i}\)` 
+
++ `\(e_{ik} = y_{ik} - \hat{y}_{ik}\)` 
+
++ `\(\hat{\sigma}^2 = \frac{\sum_{ik}\epsilon^2_{ik}}{n - I}\)`
+
++ `\(\hat{\sigma}^2_{\hat{\alpha}_{i} } = \frac{I - 1}{n}\hat{\sigma}^2\)`
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length&lt;sub&gt;ik&lt;/sub&gt;]
+.col-1[] 
+.col-1[]
+.col-1[]
+.col-1[]
+.col-5[]
+]]
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-3-1.png" width="90%" /&gt;
+
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length&lt;sub&gt;ik&lt;/sub&gt;]
+.col-1[= .boxgrey[&amp;mu;]] 
+.col-1[]
+.col-1[]
+.col-1[]
+.col-5[]
+]]
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-4-1.png" width="90%" /&gt;
+
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length&lt;sub&gt;ik&lt;/sub&gt;]
+.col-1[= .boxgrey[&amp;mu;]] 
+.col-1[\+ &amp;alpha;&lt;sub&gt;i&lt;/sub&gt;]
+.col-1[]
+.col-1[]
+.col-5[, .small[i = {.boxgreen[setosa]|.boxorange[versicolor]|.boxpurple[virginica]}]]
+]]
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-5-1.png" width="90%" /&gt;
+
+
+---
+
+# Illustration
+
+.container-grid[
+.row[
+.col-3[Sepal.Length&lt;sub&gt;ik&lt;/sub&gt;]
+.col-1[= .boxgrey[&amp;mu;]] 
+.col-1[\+ &amp;alpha;&lt;sub&gt;i&lt;/sub&gt;]
+.col-1[\+ &amp;epsilon;&lt;sub&gt;ik&lt;/sub&gt;]
+.col-1[]
+.col-5[, .small[i = {.boxgreen[setosa]|.boxorange[versicolor]|.boxpurple[virginica]}]]
+]]
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-6-1.png" width="90%" /&gt;
+
+---
+
+# Test de l'effet d'une variable
+
+.big[&lt;i class = "fas fa-arrow-circle-right"&gt;&lt;/i&gt; La variabilité de]  `\(y\)` .big[entre les modalités de la variable  est elle _significativement_ plus grande que la variabilté résiduelle ?]
+
+
+####.orange[&lt;i class = "fas fa-exclamation-triangle"&gt;&lt;/i&gt;] Dans le cas d'un plan équilibré .orange[&lt;i class = "fas fa-exclamation-triangle"&gt;&lt;/i&gt;] :
+
+
+`\(\sum_{ij}\left(y_{ij} - \bar{y}\right)^2~~~~~=~~~~~~~~\frac{n}{I}\sum_{i}\left(\hat{\alpha}_i\right)^2~~~~~~~~~+~~~~~~~~~~~~\sum_{ij}\left(e_{ij}\right)^2\)`
+
+.small[
+.container-grid[
+.row[
+.col-3[Variabilité totale]
+.col-1[=]
+.col-3[Variabilité interclasse (_between group_)] 
+.col-1[+]
+.col-3[Variabilité interclasse (_whithin group_)]
+]]
+]
+
+.container-grid[
+.row[
+.col-3[SS&lt;sub&gt;T&lt;/sub&gt;]
+.col-1[=]
+.col-3[SS&lt;sub&gt;F&lt;/sub&gt;] 
+.col-1[+]
+.col-3[SS&lt;sub&gt;R&lt;/sub&gt;]
+]]
+
+
+Test : à quel point SS&lt;sub&gt;F&lt;/sub&gt; est plus grande que SS&lt;sub&gt;R&lt;/sub&gt; ? 
+(.small[Plus il y a de groupes/observations, plus les valeurs risques d'être élevées !])
+
+&lt;i class = "fas fa-arrow-circle-right"&gt;&lt;/i&gt; Il faut normaliser avec les_ __degrés de libertés__ (_df_)!
+
+.pull-left[
+`$$CM_{F} = \frac{SS_F}{I - 1}$$`
+]
+
+.pull-right[
+`$$CM_{R} = \frac{SS_R}{n - (I - 1) - 1}$$`
+]
+
+---
+
+# Dans R
+
+
+```r
+options(contrasts=c("contr.sum","contr.sum"))
+mod = lm(Sepal.Length ~ Species, data = iris)
+anova(mod)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: Sepal.Length
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Species     2 63.212  31.606  119.26 &lt; 2.2e-16 ***
+## Residuals 147 38.956   0.265                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+# Test de l'effet d'une variable
+
+__Hypothèse__ :
+
+_H&lt;sub&gt;0&lt;/sub&gt;_ : `\(\alpha_i = 0,~~ \forall~~i\)`, tous les coefficients sont égaux, donc nuls
+
+_H&lt;sub&gt;1&lt;/sub&gt;_ : `\(\exists~~ \alpha_i \neq\)` 0, un coefficient au moins n'est pas nul
+
+__Statistique de test__ :
+
+`$$F_{obs} = \frac{CM_F}{CM_R}$$`
+
+__Sous _H&lt;sub&gt;0&lt;/sub&gt;___ :
+
+`$$F_{obs} \rightarrow F_{n-I}^{I-1}$$`
+
+---
+
+# Test de l'effet d'une variable
+
+.container-grid[
+.row[
+.col-6[
+&lt;img src="Anova_files/figure-html/unnamed-chunk-8-1.png" width="100%" /&gt;
+]
+.col-6[.small[
+#### Règle de décision
+
+`\(F_{obs} &lt; F_{n-I}^{I-1}(1-\alpha) \Rightarrow\)` acceptation de `\(H_0\)`
+
+`\(F_{obs} \geq F_{n-I}^{I-1}(1-\alpha) \Rightarrow\)` rejet de `\(H_0\)`
+]
+]
+]
+]
+
+---
+
+# Dans R
+
+
+```r
+options(contrasts=c("contr.sum","contr.sum"))
+mod = lm(Sepal.Length ~ Species, data = iris)
+anova(mod)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: Sepal.Length
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Species     2 63.212  31.606  119.26 &lt; 2.2e-16 ***
+## Residuals 147 38.956   0.265                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+```r
+pf(119.26, 2, 147, lower.tail = FALSE)
+```
+
+
+---
+
+# Exemples avec plus de facteurs
+
+
+```r
+library(agricolae)
+data(greenhouse)
+data &lt;- greenhouse$greenhouse1
+mod &lt;- lm(weight ~ variety*method, data = data)
+anova(mod)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: weight
+##                 Df Sum Sq Mean Sq  F value Pr(&gt;F)    
+## variety          2   2297    1148   0.7279 0.4835    
+## method           3 483322  161107 102.1204 &lt;2e-16 ***
+## variety:method   6 150619   25103  15.9120 &lt;2e-16 ***
+## Residuals      468 738326    1578                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+## Summary
+
+.small[
+
+Énormément d'information donné par le `summary()` !!!
+
+
+
+```r
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = weight ~ variety * method, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -88.547 -17.871  -3.492  15.626 227.944 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        72.664      1.813  40.081  &lt; 2e-16 ***
+## variety1            1.056      2.564   0.412  0.68067    
+## variety2            1.990      2.564   0.776  0.43799    
+## method1             2.022      3.140   0.644  0.51996    
+## method2            11.814      3.140   3.762  0.00019 ***
+## method3           -50.440      3.140 -16.063  &lt; 2e-16 ***
+## variety1:method1  -35.589      4.441  -8.014 8.92e-15 ***
+## variety2:method1   18.681      4.441   4.207 3.11e-05 ***
+## variety1:method2    2.014      4.441   0.454  0.65035    
+## variety2:method2   10.335      4.441   2.327  0.02038 *  
+## variety1:method3    2.855      4.441   0.643  0.52054    
+## variety2:method3   -9.963      4.441  -2.243  0.02533 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 39.72 on 468 degrees of freedom
+## Multiple R-squared:  0.4629,	Adjusted R-squared:  0.4502 
+## F-statistic: 36.66 on 11 and 468 DF,  p-value: &lt; 2.2e-16
+```
+]
+
+---
+
+# Vérification hypothèses
+
+
+```r
+plot(mod, which = 2)
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Vérification hypothèses
+
+
+
+
+```r
+plot(mod, which = 1)
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Vérification hypothèses
+
+
+
+```r
+qplot(x = data$variety, y = residuals(mod), geom = "point")
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Vérification hypothèses
+
+
+
+```r
+qplot(x = data$method, y = residuals(mod), geom = "point")
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+## Tests post-hoc (comparaisons multiples)
+
+
+```r
+library(emmeans)
+pairs(emmeans(mod, ~method))
+```
+
+```
+## NOTE: Results may be misleading due to involvement in interactions
+```
+
+```
+##  contrast               estimate   SE  df t.ratio p.value
+##  aeroponic - bed           -9.79 5.13 468  -1.910 0.2253 
+##  aeroponic - hydroponic    52.46 5.13 468  10.231 &lt;.0001 
+##  aeroponic - pot          -34.58 5.13 468  -6.744 &lt;.0001 
+##  bed - hydroponic          62.25 5.13 468  12.141 &lt;.0001 
+##  bed - pot                -24.79 5.13 468  -4.834 &lt;.0001 
+##  hydroponic - pot         -87.04 5.13 468 -16.975 &lt;.0001 
+## 
+## Results are averaged over the levels of: variety 
+## P value adjustment: tukey method for comparing a family of 4 estimates
+```
+
+---
+
+## Tests post-hoc (comparaisons multiples)
+
+.small[
+
+```r
+pairs(emmeans(mod, ~variety|method))
+```
+
+```
+## method = aeroponic:
+##  contrast           estimate   SE  df t.ratio p.value
+##  Costanera - Mariva   -55.20 8.88 468 -6.216  &lt;.0001 
+##  Costanera - Unica    -48.40 8.88 468 -5.449  &lt;.0001 
+##  Mariva - Unica         6.81 8.88 468  0.767  0.7237 
+## 
+## method = bed:
+##  contrast           estimate   SE  df t.ratio p.value
+##  Costanera - Mariva    -9.26 8.88 468 -1.042  0.5507 
+##  Costanera - Unica     18.46 8.88 468  2.079  0.0953 
+##  Mariva - Unica        27.72 8.88 468  3.121  0.0054 
+## 
+## method = hydroponic:
+##  contrast           estimate   SE  df t.ratio p.value
+##  Costanera - Mariva    11.88 8.88 468  1.338  0.3748 
+##  Costanera - Unica     -0.15 8.88 468 -0.017  0.9998 
+##  Mariva - Unica       -12.03 8.88 468 -1.355  0.3656 
+## 
+## method = pot:
+##  contrast           estimate   SE  df t.ratio p.value
+##  Costanera - Mariva    48.84 8.88 468  5.499  &lt;.0001 
+##  Costanera - Unica     46.49 8.88 468  5.234  &lt;.0001 
+##  Mariva - Unica        -2.35 8.88 468 -0.265  0.9621 
+## 
+## P value adjustment: tukey method for comparing a family of 3 estimates
+```
+]
+---
+
+## .orange[&lt;i class = "fas fa-exclamation-triangle"&gt;&lt;/i&gt;] p-value !!! 
+
+#### Tableau d'Anova
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;  &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; fongicide &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; variete &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; interaction &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; p-value &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0500205 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0006926 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.231347 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+.pull-left[
+#### Comparaisons fongicides
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;  &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p-value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; F1-F2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.81 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0500205 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+#### Comparaisons variétés
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;  &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p-value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; V1-V2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.58 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0284387 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; V1-V3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0173694 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; V2-V3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.78 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1120579 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+&lt;br/&gt;
+&lt;br/&gt;
+.big[Quelles conclusions peut-on faire de ces résultats ?]
+
+---
+
+## .orange[&lt;i class = "fas fa-exclamation-triangle"&gt;&lt;/i&gt;] p-value !!! 
+
+.big[
++ Les _p-value_ dépendent de la qualité ET de la quantité des données !
+
++ Le seuil de 0.05 est arbitraire !
+
++ Les résultats des tests statistiques ne sont pas la fin de l'analyse. Il est important de prendre du recul et d'évaluer la qualité des résultats !
+
++ Les résultats des tests ne consituent pas des conclusions/décisions ! Ce sont des outils qui aident les experts à conclure/décider !
+]
+
+---
+exclude: true
+class: inverse
+
+# Exercice 1 
+
+Retrouver les valeurs du tableau d'analyse du jeu de données iris
+
+---
+class: inverse
+
+# Exercice 2 
+
+Analyse du fichier _cow.csv_ : mesure de rendement de production laitière par différentes vaches. Les vaches ont reçu soit la ration R1, soit la ration R2 de nourriture et sont à des âges différents (1ère, 2ème, 3ème ou 4ème lactation).
+
+Existe t-il une influence de la ration et/ou de la lactation sur la production de lait ?
+
+
+---
+exclude: true
+
+# Correction exercice 1
+
+.small[
+
+```r
+# Groupe
+i &lt;- length(unique(iris$Species))
+# Observation
+n &lt;- nrow(iris)
+# Mu
+mu &lt;- pull(iris, Sepal.Length) %&gt;% mean()
+# Coef
+dtalpha &lt;- iris %&gt;% 
+  group_by(Species) %&gt;% 
+  summarize(alphas = mean(Sepal.Length) - mu)
+# SS du facteur
+SSF &lt;- (n/i)*sum(pull(dtalpha, alphas)^2)
+# Residu
+dt &lt;- left_join(iris, dtalpha, by = "Species") %&gt;% 
+  mutate(preds = mu + alphas) %&gt;% 
+  mutate(e = preds - Sepal.Length)
+# SS residuel
+SSR &lt;- sum(pull(dt, e)^2)
+# Carrée moyens
+CMF &lt;- SSF/(i - 1)
+CMR &lt;- SSR/(n - i)
+# Stat de test
+Fobs &lt;- CMF/CMR
+# p-value
+pval &lt;- pf(Fobs, i - 1, n - i, lower.tail = FALSE)
+```
+]
+
+---
+exclude: true
+
+# Correction exercice 1
+
+.small[
+
+```r
+tibble(
+  Df = c(i - 1, n - i),
+  SS = c(SSF, SSR),
+  CM = c(CMF, CMR),
+  F = c(Fobs, NA),
+  p = c(pval, NA)
+)
+```
+
+```
+## # A tibble: 2 x 5
+##      Df    SS     CM     F         p
+##   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+## 1     2  63.2 31.6    119.  1.67e-31
+## 2   147  39.0  0.265   NA  NA
+```
+
+
+```r
+mod &lt;- lm(Sepal.Length~Species, data = iris)
+anova(mod)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: Sepal.Length
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Species     2 63.212  31.606  119.26 &lt; 2.2e-16 ***
+## Residuals 147 38.956   0.265                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+]
+
+
+---
+
+# Correction exercice 2
+
+
+
+```r
+library(readr)
+library(ggplot2)
+library(emmeans)
+library(dplyr)
+data &lt;- read_delim(here::here("static/data/cows.csv"), delim = ";")
+summary(data)
+```
+
+```
+##     ration           lactation             yield     
+##  Length:32          Length:32          Min.   :2660  
+##  Class :character   Class :character   1st Qu.:3470  
+##  Mode  :character   Mode  :character   Median :3716  
+##                                        Mean   :3738  
+##                                        3rd Qu.:4030  
+##                                        Max.   :4792
+```
+
+
+---
+
+# Correction exercice 2
+
+
+
+```r
+ggplot(data) +
+  aes(x = lactation, y = yield, color = ration) +
+geom_point()
+```
+
+![](Anova_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+
+
+---
+
+# Correction exercice 2
+
+
+
+```r
+mod &lt;- lm(yield ~ ration + lactation + ration:lactation, data = data)
+anova(mod)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: yield
+##                  Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## ration            1  448404  448404  7.3174   0.01236 *  
+## lactation         3 3631550 1210517 19.7540 1.136e-06 ***
+## ration:lactation  3  838933  279644  4.5634   0.01148 *  
+## Residuals        24 1470708   61280                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+# Correction exercice 2
+
+.small[
+
+```r
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = yield ~ ration + lactation + ration:lactation, data = data)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -471.0 -133.0    0.5  142.8  456.0 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         3737.63      43.76  85.411  &lt; 2e-16 ***
+## ration1              118.37      43.76   2.705 0.012362 *  
+## lactation1          -311.63      75.80  -4.111 0.000397 ***
+## lactation2          -317.62      75.80  -4.191 0.000325 ***
+## lactation3           484.87      75.80   6.397 1.29e-06 ***
+## ration1:lactation1   176.62      75.80   2.330 0.028525 *  
+## ration1:lactation2    69.63      75.80   0.919 0.367450    
+## ration1:lactation3  -261.88      75.80  -3.455 0.002059 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 247.5 on 24 degrees of freedom
+## Multiple R-squared:  0.7698,	Adjusted R-squared:  0.7027 
+## F-statistic: 11.47 on 7 and 24 DF,  p-value: 2.562e-06
+```
+] 
+ 
+---
+class: wider
+
+.small[
+ 
+.container-grid[
+.row[
+.col-5[
+
+```r
+plot(mod, which = 2)
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-29-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+]
+.col-1[]
+.col-5[
+
+```r
+plot(mod, which = 1)
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-30-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+]
+]
+.row[
+.col-5[
+
+```r
+qplot(x = data$ration, 
+      y = residuals(mod), 
+      geom = "point")
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-31-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+]
+.col-1[]
+.col-5[
+
+```r
+qplot(x = data$lactation, 
+      y = residuals(mod), 
+      geom = "point")
+```
+
+&lt;img src="Anova_files/figure-html/unnamed-chunk-32-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+]
+]
+]
+
+]
+
+---
+
+# Correction exercice 2
+
+.small[
+
+```r
+library(emmeans)
+pairs(emmeans(mod,~ration))
+```
+
+```
+## NOTE: Results may be misleading due to involvement in interactions
+```
+
+```
+##  contrast estimate   SE df t.ratio p.value
+##  R1 - R2       237 87.5 24 2.705   0.0124 
+## 
+## Results are averaged over the levels of: lactation
+```
+
+
+
+```r
+pairs(emmeans(mod,~lactation))
+```
+
+```
+## NOTE: Results may be misleading due to involvement in interactions
+```
+
+```
+##  contrast estimate  SE df t.ratio p.value
+##  A - B           6 124 24  0.048  1.0000 
+##  A - C        -796 124 24 -6.435  &lt;.0001 
+##  A - D        -456 124 24 -3.684  0.0060 
+##  B - C        -802 124 24 -6.484  &lt;.0001 
+##  B - D        -462 124 24 -3.733  0.0053 
+##  C - D         340 124 24  2.751  0.0508 
+## 
+## Results are averaged over the levels of: ration 
+## P value adjustment: tukey method for comparing a family of 4 estimates
+```
+
+]
+
+---
+
+# Correction exercice 2
+
+.small[
+
+```r
+pairs(emmeans(mod,~ration|lactation))
+```
+
+```
+## lactation = A:
+##  contrast estimate  SE df t.ratio p.value
+##  R1 - R2       590 175 24  3.371  0.0025 
+## 
+## lactation = B:
+##  contrast estimate  SE df t.ratio p.value
+##  R1 - R2       376 175 24  2.148  0.0420 
+## 
+## lactation = C:
+##  contrast estimate  SE df t.ratio p.value
+##  R1 - R2      -287 175 24 -1.640  0.1141 
+## 
+## lactation = D:
+##  contrast estimate  SE df t.ratio p.value
+##  R1 - R2       268 175 24  1.531  0.1388
+```
+
+]
+
+---
+
+# Correction exercice 2
+
+.small[
+
+```r
+pairs(emmeans(mod,~lactation|ration))
+```
+
+```
+## ration = R1:
+##  contrast estimate  SE df t.ratio p.value
+##  A - B         113 175 24  0.646  0.9161 
+##  A - C        -358 175 24 -2.045  0.1999 
+##  A - D        -295 175 24 -1.685  0.3530 
+##  B - C        -471 175 24 -2.691  0.0577 
+##  B - D        -408 175 24 -2.331  0.1190 
+##  C - D          63 175 24  0.360  0.9836 
+## 
+## ration = R2:
+##  contrast estimate  SE df t.ratio p.value
+##  A - B        -101 175 24 -0.577  0.9380 
+##  A - C       -1235 175 24 -7.055  &lt;.0001 
+##  A - D        -617 175 24 -3.525  0.0088 
+##  B - C       -1134 175 24 -6.478  &lt;.0001 
+##  B - D        -516 175 24 -2.948  0.0331 
+##  C - D         618 175 24  3.531  0.0087 
+## 
+## P value adjustment: tukey method for comparing a family of 4 estimates
+```
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "agate",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

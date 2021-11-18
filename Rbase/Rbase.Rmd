@@ -6,6 +6,7 @@ date: "15/10/2019 (MàJ: `r format(Sys.Date(), '%d/%m/%Y')`)"
 output:
   xaringan::moon_reader:
     css: [default, default-fonts, "../static/css/custom.css"]
+    #chakra: "../libs/remark-latest.min.js"
     lib_dir: libs
     nature:
       highlightStyle: agate
@@ -27,7 +28,7 @@ library(kableExtra)
 
 # Orientée objet<sup>*</sup>
 
-__objet__ : structure de données auquelle est attachée une classe. 
+__objet__ : structure de données à laquelle est attachée une classe. 
 
 __classe__ : définit le comportement d'un objet en décrivant ses attributs et relations avec les autres classes.
 

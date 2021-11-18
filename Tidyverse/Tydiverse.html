@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Manipuler ses données avec le tidyverse</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Benjamin Louis" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../static/css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Manipuler ses données avec le tidyverse
+### Benjamin Louis
+### 15/10/2019 (MàJ: 15/10/2019)
+
+---
+
+
+
+
+class: inverse, middle, center
+
+
+&lt;img src="../static/img/tidyverse.svg" width="50%"&gt;
+
+---
+
+# Le tidyverse
+
++ Ensemble de packages destinés à la science des données
+
++ (Co)développés par [Hadley Wickham](http://hadley.nz/), _chief scientist_ chez &lt;img src="../static/img/RStudio.svg" width="7%"&gt;
+
++ Philosophie, grammaire et structure de données communes : 
+  + _tidy data_
+  + _layered grammar of graphics_
+
++ Instalation complète :
+
+
+```r
+install.packages("tidyverse")
+```
+
+---
+
+# Le tidyverse
+
+.center[
+&lt;img src="../static/img/all_tidyverse.svg" width="80%"&gt;
+]
+
+---
+
+# Le tidyverse
+
+.center[
+&lt;img src="../static/img/all_tidyverse_2.svg" width="90%"&gt;
+]
+
+.footnote[
+et plus encore ...
+]
+
+---
+
+# Le tidyverse : _tidy data_
+
+
+.center[
+&lt;img src="../static/img/tidy-data.png" width="100%"&gt;
+]
+
+
+---
+
+# Le tidyverse : _grammar_
+
+.big[
++ Volonté d'obtenir un code compréhensible
+
++ Les noms des fonction sont des verbes
+
++ Syntaxe qui permet une lecture semblable à des phrases !
+]
+
+.center[
+&lt;img src="../static/img/pipe.svg" width="40%"&gt;
+]
+
+---
+
+# `%&gt;%` ou _pipe_
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Premier argument d'une fonction
+
+
+```r
+# On peut remplacer :
+verb(arg1 = objet, arg2 = "valeur_arg2")
+# par : 
+objet %&gt;%
+  verb(arg2 = "valeur_arg2")
+```
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Autre argument
+
+
+```r
+# On peut remplacer :
+verb(arg1 = valeur_arg_1, arg2 = objet)
+# par : 
+objet %&gt;%
+  verb(arg1 = valeur_arg_1, arg2 = .)
+```
+
+---
+
+# `%&gt;%` ou _pipe_
+
+À la place de :
+
+
+```r
+objet &lt;- verb_1(objet, ...)
+objet &lt;- verb_2(objet, ...)
+objet &lt;- verb_3(objet, ...)
+objet &lt;- verb_4(objet, ...)
+```
+
+On peut écrire :
+
+
+```r
+objet &lt;- objet %&gt;% 
+  verb_1(...) %&gt;% 
+  verb_2(...) %&gt;% 
+  verb_3(...) %&gt;% 
+  verb_4(...)
+```
+---
+
+# Le tidyverse : _grammar_
+
+.big[
++ Volonté d'obtenir un code compréhensible
+
++ Les noms des fonction sont des verbes
+
++ Syntaxe qui permet une lecture semblable à des phrases !
+]
+
+.center[
+&lt;img src="../static/img/pipe.svg" width="40%"&gt;
+]
+
+---
+
+# `%&gt;%` ou _pipe_
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Premier argument d'une fonction
+
+
+```r
+# On peut remplacer :
+verb(arg1 = objet, arg2 = "valeur_arg2")
+# par : 
+objet %&gt;%
+  verb(arg2 = "valeur_arg2")
+```
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Autre argument
+
+
+```r
+# On peut remplacer :
+verb(arg1 = valeur_arg_1, arg2 = objet)
+# par : 
+objet %&gt;%
+  verb(arg1 = valeur_arg_1, arg2 = .)
+```
+
+---
+
+# `%&gt;%` ou _pipe_
+
+À la place de :
+
+
+```r
+objet &lt;- verb_1(objet, ...)
+objet &lt;- verb_2(objet, ...)
+objet &lt;- verb_3(objet, ...)
+objet &lt;- verb_4(objet, ...)
+```
+
+On peut écrire :
+
+
+```r
+objet &lt;- objet %&gt;% 
+  verb_1(...) %&gt;% 
+  verb_2(...) %&gt;% 
+  verb_3(...) %&gt;% 
+  verb_4(...)
+```
+
+
+
+---
+class: inverse, middle, center
+
+&lt;img src="../static/img/tibble.svg" width="50%"&gt;
+
+---
+
+# _tibble_, un autre data.frame
+
+
+&gt; _On garde le bon, on jette le mauvais_
+
++ Pas de changement du nom ou du type des variables
+
++ une méthode `print()` améliorée
+
+
+
+```r
+as_tibble(iris)
+```
+
+```
+## # A tibble: 150 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # … with 140 more rows
+```
+
+---
+
+# _tibble_, création
+
+.pull-left[
+#### Comme `data.frame()`
+
+
+```r
+tibble(x = 1:5, y = 1, 
+       z = x ^ 2 + y)
+```
+
+```
+## # A tibble: 5 x 3
+##       x     y     z
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     1     2
+## 2     2     1     5
+## 3     3     1    10
+## 4     4     1    17
+## 5     5     1    26
+```
+]
+
+.pull-right[
+#### ou par ligne
+
+
+```r
+tribble(
+  ~x, ~y,  ~z,
+  "a", 2,  3.6,
+  "b", 1,  8.5
+)
+```
+
+```
+## # A tibble: 2 x 3
+##   x         y     z
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 a         2   3.6
+## 2 b         1   8.5
+```
+]
+
+.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Les exemples proviennent de [https://tibble.tidyverse.org/](https://tibble.tidyverse.org/)
+]
+---
+class: inverse, middle, center
+
+&lt;img src="../static/img/tidyr.svg" width="50%"&gt;
+
+---
+
+### `tidyr::`
+
++ `pivot_longer()`
+
++ `pivot_wider()`
+
++ `separate()`
+
++ `unite()`
+
++ `complete()`
+
++ `drop_na()`
+
+---
+
+### `tidyr::pivot_*`
+
+.center[
+&lt;img src="../static/img/original-dfs-tidy.svg" width="85%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+
+### `tidyr::pivot_*`
+
+
+.center[
+&lt;img src="../static/img/tidyr-pivot.gif" width="50%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+---
+
+### `tidyr::pivot_longer()`
+
+.lesssmall[
+
+```r
+pivot_longer(wide, x:z, names_to = "key", values_to = "val")
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_longer.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+
+### `tidyr::pivot_wider()`
+
+.lesssmall[
+
+```r
+pivot_wider(long, id_cols = "id", names_from = "key", values_from = "val")
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_wider.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+
+### `tidyr::separate()`
+
+.lesssmall[
+
+```r
+separate(df1, col = col, into = c("col1", "col2"), sep = "/")
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_separate.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+
+### `tidyr::unite()`
+
+.lesssmall[
+
+```r
+unite(df2, col = "col", col1, col2, sep = "/")
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_unite.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+
+---
+
+### `tidyr::complete()`
+
+.lesssmall[
+
+```r
+complete(uncomplete, id, group)
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_complete.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+
+### `tidyr::complete()`
+
+.lesssmall[
+
+```r
+complete(uncomplete, id, group, fill = list(val = 0))
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_complete_fill.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+
+### `tidyr::drop_na()`
+
+.lesssmall[
+
+```r
+drop_na(df1)
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_drop_na.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+
+### `tidyr::drop_na()`
+
+.lesssmall[
+
+```r
+drop_na(df1, val)
+```
+]
+
+.center[
+&lt;img src="../static/img/tidyr_static_drop_na_2.svg" width="70%"&gt;
+]
+
+.small[.footnote[
+&lt;sup&gt;*&lt;/sup&gt;Images et animations proviennent/adaptées de [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+]]
+
+---
+class: inverse, middle, center
+
+&lt;img src="../static/img/dplyr.svg" width="50%"&gt;
+
+---
+
+### `tidyr::`
+
++ `select()`
+
++ `rename()`
+
++ `mutate()`
+
++ `filter()`
+
++ `arrange()`
+
++ `summarize()`
+
++ `group_by()`
+
+---
+
+# Jeu de données d'exemple : iris
+
+
+```r
+iris &lt;- as_tibble(iris)
+iris
+```
+
+```
+## # A tibble: 150 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # … with 140 more rows
+```
+
+
+---
+
+### `dplyr::select()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Sélectionner des variables
+
+
+```r
+select(iris, Sepal.Length, Species)
+```
+
+```
+## # A tibble: 150 x 2
+##    Sepal.Length Species
+##           &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1 setosa 
+##  2          4.9 setosa 
+##  3          4.7 setosa 
+##  4          4.6 setosa 
+##  5          5   setosa 
+##  6          5.4 setosa 
+##  7          4.6 setosa 
+##  8          5   setosa 
+##  9          4.4 setosa 
+## 10          4.9 setosa 
+## # … with 140 more rows
+```
+
+
+---
+
+### `dplyr::select()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Comment séléctionner&lt;sup&gt;*&lt;/sup&gt;
+
+.small[
+
+
+```r
+# Bornes
+select(iris, Sepal.Length:Species)
+
+# on enlève Sepal.Length et Species
+select(iris, -Sepal.Length, -Species) 
+
+# Commence par Sepal
+select(iris, starts_with("Sepal"))
+
+# Termine par Length
+select(iris, starts_with("Length")) 
+
+# Contient Length
+select(iris, contains("Length"))
+
+# Species puis tout le reste
+select(iris, Species, everything())
+
+# On peut renommer
+select(iris, sepal_length = Sepal.Length, Species)
+
+# On peut tout combiner
+select(iris, contains("Length"), -Sepal.Length) 
+```
+]
+
+.footnote[
+&lt;sup&gt;*&lt;/sup&gt;cf `?select`
+]
+
+---
+
+### `dplyr::select_*()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `select_all()`
+
+```r
+select_all(iris, .funs = tolower)
+select_all(iris, .funs = list(~tolower(.))
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `select_at()`
+
+```r
+select_at(iris, .vars = vars(-Species))
+select_at(iris, .vars = vars(-Species), .funs = tolower)
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `select_if()`
+
+```r
+select_if(iris, .predicate = is.numeric)
+select_if(iris, .predicate = is.numeric, .funs = tolower)
+```
+
+.footnote[
+`tolower()` : transforme les majuscules en minuscules
+]
+
+---
+
+### `dplyr::rename()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Renommer des variables
+
+
+```r
+rename(iris, long_petal = Sepal.Length)
+```
+
+```
+## # A tibble: 150 x 5
+##    long_petal Sepal.Width Petal.Length Petal.Width Species
+##         &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1        5.1         3.5          1.4         0.2 setosa 
+##  2        4.9         3            1.4         0.2 setosa 
+##  3        4.7         3.2          1.3         0.2 setosa 
+##  4        4.6         3.1          1.5         0.2 setosa 
+##  5        5           3.6          1.4         0.2 setosa 
+##  6        5.4         3.9          1.7         0.4 setosa 
+##  7        4.6         3.4          1.4         0.3 setosa 
+##  8        5           3.4          1.5         0.2 setosa 
+##  9        4.4         2.9          1.4         0.2 setosa 
+## 10        4.9         3.1          1.5         0.1 setosa 
+## # … with 140 more rows
+```
+
+---
+
+### `dplyr::rename_*()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `rename_all()`
+
+```r
+rename_all(iris, .funs = tolower)
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `rename_at()`
+
+```r
+rename_at(iris, .vars = vars(-Species), .funs = tolower)
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `rename_if()`
+
+```r
+rename_if(iris, .predicate = is.numeric, .funs = tolower)
+```
+
+---
+
+### `dplyr::mutate()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Ajouter des variables
+
+
+```r
+mutate(iris, taux_sepal = Sepal.Length/Sepal.Width)
+```
+
+```
+## # A tibble: 150 x 6
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species taux_sepal
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;        &lt;dbl&gt;
+##  1          5.1         3.5          1.4         0.2 setosa        1.46
+##  2          4.9         3            1.4         0.2 setosa        1.63
+##  3          4.7         3.2          1.3         0.2 setosa        1.47
+##  4          4.6         3.1          1.5         0.2 setosa        1.48
+##  5          5           3.6          1.4         0.2 setosa        1.39
+##  6          5.4         3.9          1.7         0.4 setosa        1.38
+##  7          4.6         3.4          1.4         0.3 setosa        1.35
+##  8          5           3.4          1.5         0.2 setosa        1.47
+##  9          4.4         2.9          1.4         0.2 setosa        1.52
+## 10          4.9         3.1          1.5         0.1 setosa        1.58
+## # … with 140 more rows
+```
+
+.footnote[
+Il existe plusieurs fonctions utiles : `?mutate`
+]
+
+---
+
+### `dplyr::mutate_*()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `mutate_all()`
+
+```r
+mutate_all(iris, round)
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `mutate_at()`
+
+```r
+mutate_at(iris, vars(contains("Sepal")), round)
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `mutate_if()`
+
+```r
+mutate_if(iris, is.numeric, 
+          .funs = list(~ . - mean(., na.rm = TRUE)))
+```
+
+
+---
+
+### `dplyr::filter()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Filtrer les observations
+
+
+```r
+filter(iris, Species == "versicolor" &amp; Sepal.Length &gt;= 6.5)
+```
+
+```
+## # A tibble: 9 x 5
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species   
+##          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;     
+## 1          7           3.2          4.7         1.4 versicolor
+## 2          6.9         3.1          4.9         1.5 versicolor
+## 3          6.5         2.8          4.6         1.5 versicolor
+## 4          6.6         2.9          4.6         1.3 versicolor
+## 5          6.7         3.1          4.4         1.4 versicolor
+## 6          6.6         3            4.4         1.4 versicolor
+## 7          6.8         2.8          4.8         1.4 versicolor
+## 8          6.7         3            5           1.7 versicolor
+## 9          6.7         3.1          4.7         1.5 versicolor
+```
+
+---
+
+### `dplyr::filter_*()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `filter_all()`
+
+```r
+filter_all(iris, .vars_predicate = all_vars(!is.na(.)))
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `filter_at()`
+
+```r
+filter_at(iris, .vars = vars(starts_with("Se")), 
+          .vars_predicate = any_vars(. &gt; mean(.)))
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `filter_if()`
+
+```r
+filter_if(iris, .predicate = is.numeric, 
+          .vars_predicate = all_vars(. &gt; mean(.)))
+```
+
+---
+
+### `dplyr::arrange()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Classer les observations selon des variables
+
+
+```r
+arrange(iris, desc(Species), Sepal.Length)
+```
+
+```
+## # A tibble: 150 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species  
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;    
+##  1          4.9         2.5          4.5         1.7 virginica
+##  2          5.6         2.8          4.9         2   virginica
+##  3          5.7         2.5          5           2   virginica
+##  4          5.8         2.7          5.1         1.9 virginica
+##  5          5.8         2.8          5.1         2.4 virginica
+##  6          5.8         2.7          5.1         1.9 virginica
+##  7          5.9         3            5.1         1.8 virginica
+##  8          6           2.2          5           1.5 virginica
+##  9          6           3            4.8         1.8 virginica
+## 10          6.1         3            4.9         1.8 virginica
+## # … with 140 more rows
+```
+
+
+---
+
+### `dplyr::arrange_*()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `arrange_all()`
+
+```r
+arrange_all(iris)
+arrange_all(iris. .funs = )
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `arrange_at()`
+
+```r
+arrange_at(iris, .vars = vars(contains("Sepal")))
+arrange_at(iris, .vars= vars(contains("Sepal")), .funs = desc)
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `arrange_if()`
+
+```r
+arrange_if(iris, .predicate = ~!is.numeric(.))
+arrange_if(iris, .predicate = ~!is.numeric(.), .funs = desc)
+```
+
+---
+
+### `dplyr::summarize()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Synthétiser des variables
+
+
+```r
+summarize(iris, moy = mean(Sepal.Length))
+```
+
+```
+## # A tibble: 1 x 1
+##     moy
+##   &lt;dbl&gt;
+## 1  5.84
+```
+
+.big[.center[
+&lt;br/&gt;
+&lt;br/&gt;
+Intéressant surtout avec `group_by()` !!!
+]]
+
+---
+
+### `dplyr::summarize_*()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `summarize_all()`
+
+```r
+summarize_all(iris, n())
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `summarize_at()`
+
+```r
+summarize_at(iris, .vars = vars(-Species), .funs = mean)
+```
+
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; `summarize_if()`
+
+```r
+summarize_if(iris, .predicate = is.numeric, .funs = mean)
+```
+
+---
+
+### `dplyr::group_by()` 
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Grouper en fonction de variables (`dplyr::ungroup()` pour dégrouper)
+
+
+```r
+group_by(iris, Species)
+```
+
+```
+## # A tibble: 150 x 5
+## # Groups:   Species [3]
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # … with 140 more rows
+```
+
+.big[.center[
+Peut se combiner avec beaucoup d'autres fonctions !
+]]
+
+---
+
+### `dplyr::group_by() + filter()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Grouper en fonction de variables
+
+
+```r
+group_by(iris, Species) %&gt;% 
+  filter_if(is.numeric, ~. &gt; mean(.))
+```
+
+```
+## # A tibble: 30 x 5
+## # Groups:   Species [3]
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species   
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;     
+##  1          5.4         3.9          1.7         0.4 setosa    
+##  2          5.7         4.4          1.5         0.4 setosa    
+##  3          5.7         3.8          1.7         0.3 setosa    
+##  4          5.1         3.8          1.5         0.3 setosa    
+##  5          5.1         3.7          1.5         0.4 setosa    
+##  6          5.1         3.8          1.9         0.4 setosa    
+##  7          7           3.2          4.7         1.4 versicolor
+##  8          6.4         3.2          4.5         1.5 versicolor
+##  9          6.9         3.1          4.9         1.5 versicolor
+## 10          6.5         2.8          4.6         1.5 versicolor
+## # … with 20 more rows
+```
+
+---
+
+### `dplyr::group_by() + summarize()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Grouper en fonction de variables
+
+
+```r
+group_by(iris, Species) %&gt;% 
+  summarize_if(is.numeric, .funs = mean)
+```
+
+```
+## # A tibble: 3 x 5
+##   Species    Sepal.Length Sepal.Width Petal.Length Petal.Width
+##   &lt;fct&gt;             &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+## 1 setosa             5.01        3.43         1.46       0.246
+## 2 versicolor         5.94        2.77         4.26       1.33 
+## 3 virginica          6.59        2.97         5.55       2.03
+```
+
+---
+
+### `dplyr::group_by() + mutate()`
+
+&lt;i class="fas fa-arrow-circle-right"&gt;&lt;/i&gt; Grouper en fonction de variables
+
+
+```r
+group_by(iris, Species) %&gt;% 
+  mutate(moy_sepal_length = mean(Sepal.Length)) %&gt;% 
+  select(Species, moy_sepal_length)
+```
+
+```
+## # A tibble: 150 x 2
+## # Groups:   Species [3]
+##    Species moy_sepal_length
+##    &lt;fct&gt;              &lt;dbl&gt;
+##  1 setosa              5.01
+##  2 setosa              5.01
+##  3 setosa              5.01
+##  4 setosa              5.01
+##  5 setosa              5.01
+##  6 setosa              5.01
+##  7 setosa              5.01
+##  8 setosa              5.01
+##  9 setosa              5.01
+## 10 setosa              5.01
+## # … with 140 more rows
+```
+
+---
+class: inverse
+
+# Exercices
+
+Dans un script :
+
+
+```r
+library(tidyr)
+library(dplyr)
+who &lt;- who %&gt;% 
+  rename_at(vars(starts_with("new")),  
+            ~stringr::str_replace(., "new_?", ""))
+```
+
+1. Transformer `who` en _tidy data_
+2. Ajouter une variable avec le nombre total de cas dans chaque pays chaque année
+3. Quelle année a connu le plus de cas dans le mondeClasser dans l'ordre croissant par ce nombre total
+4. Comparer le nombre de cas par tranche d'âge en France
+
+---
+
+# Correction
+
+.small[
+
+
+```r
+tidywho &lt;- who %&gt;% 
+  # 1. Tidy
+  pivot_longer(sp_m014:rel_f65, names_to = "key", values_to = "cas") %&gt;% 
+  drop_na(cas) %&gt;% 
+  separate(key, into = c("type", "sexage"), sep = "_") %&gt;% 
+  separate(sexage, into = c("sex", "age"), sep = 1) %&gt;% 
+  mutate(age = recode(age, "014" = "0-14", "1524" = "15-24",
+                      "2534" = "25-34", "3544" = "35-44",
+                      "4554" = "45-54", "5564" = "55-64", "65" = "65+")) %&gt;% 
+  select(-iso2, -iso3) %&gt;% 
+  # 2. Total par pays et annee
+  group_by(country, year) %&gt;% 
+  mutate(total = sum(cas)) %&gt;% 
+  ungroup()
+```
+
+
+```
+## # A tibble: 76,046 x 7
+##    country      year type  sex   age     cas total
+##    &lt;chr&gt;       &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt;
+##  1 Afghanistan  1997 sp    m     0-14      0   128
+##  2 Afghanistan  1997 sp    m     15-24    10   128
+##  3 Afghanistan  1997 sp    m     25-34     6   128
+##  4 Afghanistan  1997 sp    m     35-44     3   128
+##  5 Afghanistan  1997 sp    m     45-54     5   128
+##  6 Afghanistan  1997 sp    m     55-64     2   128
+##  7 Afghanistan  1997 sp    m     65+       0   128
+##  8 Afghanistan  1997 sp    f     0-14      5   128
+##  9 Afghanistan  1997 sp    f     15-24    38   128
+## 10 Afghanistan  1997 sp    f     25-34    36   128
+## # … with 76,036 more rows
+```
+
+]
+---
+
+# Correction
+
+
+```r
+# 3. Année avec le plus de cas
+tidywho %&gt;% 
+  group_by(year) %&gt;% 
+  summarise(total = sum(cas)) %&gt;% 
+  arrange(desc(total))
+```
+
+```
+## # A tibble: 34 x 2
+##     year   total
+##    &lt;int&gt;   &lt;int&gt;
+##  1  2010 3986811
+##  2  2011 3977151
+##  3  2012 3962589
+##  4  2007 3836674
+##  5  2009 3834194
+##  6  2008 3535278
+##  7  2013 3220572
+##  8  2006 2996524
+##  9  2005 2364023
+## 10  2004 2184924
+## # … with 24 more rows
+```
+
+---
+
+# Correction
+
+
+```r
+# 4. Comparaison tranche d'âge en France
+tidywho %&gt;% 
+  filter(country == "France") %&gt;% 
+  group_by(age) %&gt;% 
+  summarize(pmoy = sum(total*cas)/sum(total))
+```
+
+```
+## # A tibble: 7 x 2
+##   age    pmoy
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1 0-14   36.9
+## 2 15-24  99.2
+## 3 25-34 172. 
+## 4 35-44 144. 
+## 5 45-54 117. 
+## 6 55-64  90.7
+## 7 65+   199.
+```
+
+---
+
+# Références
+
++ [https://www.tidyverse.org/](https://www.tidyverse.org/)
+
++ [https://thinkr.fr/tidyverse-hadleyverse/](https://thinkr.fr/tidyverse-hadleyverse/)
+
++ [https://r4ds.had.co.nz/](https://r4ds.had.co.nz/)
+
++ [http://vita.had.co.nz/papers/tidy-data.html](http://vita.had.co.nz/papers/tidy-data.html)
+
++ [http://vita.had.co.nz/papers/layered-grammar.html](http://vita.had.co.nz/papers/layered-grammar.html)
+
++ [https://github.com/gadenbuie/tidyexplain](https://github.com/gadenbuie/tidyexplain)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "agate",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

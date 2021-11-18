@@ -7,6 +7,7 @@ output:
   xaringan::moon_reader:
     css: [default, default-fonts, "../static/css/custom.css"]
     lib_dir: libs
+    #chakra: "../libs/remark-latest.min.js"
     nature:
       highlightStyle: agate
       highlightLines: true
@@ -159,9 +160,9 @@ goodsport <- sport %>%
   select(-key) %>% 
   complete(id, value, fill = list(val = "non")) %>% 
   group_by(id) %>% 
-  mutate(sport = if (all(val == "non")) { 
+  mutate(sport = if (any(val == "oui" & value == "aucun sport", na.rm = TRUE)) { 
     "non" 
-    } else if (val[is.na(value)] == "oui") { 
+    } else if (any(val == "oui" & is.na(value))) { 
       NA_character_
     } else { 
       "oui" 

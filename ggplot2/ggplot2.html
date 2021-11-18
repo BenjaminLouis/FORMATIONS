@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>ggplot2.utf8</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Benjamin Louis" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../static/css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <img src="../static/img/ggplot2.svg" width="30%">
+## Un puissant package de visualisation
+### Benjamin Louis
+### 15/10/2019 (MàJ: 15/10/2019)
+
+---
+
+
+
+
+# `ggplot2`
+
++ Développé par [Hadley Wickham](http://hadley.nz/)
+
++ Package du _Tidyverse_
+
++ Se veut élégant et polyvalent
+
++ Applique le _grammar of graphics_ sytème
+
++ Template :
+
+
+```r
+ggplot(data = mon_data) +
+  aes(x = var_x, y = var_y) +
+  geom_***() +
+  ...
+```
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris)
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-3-1.png" width="90%" /&gt;
+]
+]]
+
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length)
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-5-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point()
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-7-1.png" width="90%" /&gt;
+]
+]]
+
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species))
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal")
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-11-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal")
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-13-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2")
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-15-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw()
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-17-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length) +
+  geom_point(aes(color = Species)) +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-19-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+# Example
+
+.grid-container[.row[
+.col-5[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  labs(x = "Length of Iris Sepal") +
+  labs(y = "Width of Iris Sepal") +
+  labs(title = "Iris dataset",
+       subtitle = "Exemple for ggplot2") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  geom_smooth(method = "lm")
+```
+]
+]
+.col-7[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-21-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: inverse, middle, center
+
+# Autres `geom_*`
+
+---
+class: wider
+
+### `geom_boxplot()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot()
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-23-1.png" width="90%" /&gt;
+]
+]]
+
+
+---
+class: wider
+
+### `geom_jitter()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_jitter()
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-25-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `geom_violin()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_violin()
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-27-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `geom_histogram()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Length) +
+  geom_histogram()
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-29-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `geom_histogram()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Length) +
+  geom_histogram(bins = 10)
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-31-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `geom_bar()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+ggplot(iris) +
+  aes(x = Species) +
+  geom_bar()
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-33-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `geom_line()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+dt &lt;- tibble(x = 1:10, y = 11:20)
+ggplot(dt) +
+  aes(x = x, y = y) +
+  geom_line()
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-35-1.png" width="90%" /&gt;
+]
+]]
+
+---
+
+# Autres
+
++ `geom_smooth()`
+
++ `geom_freqpoly()`
+
++ `geom_abline()`
+
++ `geom_hline()`
+
++ `geom_vline()`
+
++ `geom_polygon()`
+
++ `geom_text()`
+
++ `geom_label()`
+
++ ...
+
+
+---
+class: inverse, middle, center
+
+# Facetting
+
+---
+class: wider
+
+### `facet_wrap()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~Species)
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-37-1.png" width="90%" /&gt;
+]
+]]
+
+
+---
+class: wider
+
+### `facet_grid()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(mtcars) +
+  aes(x = wt, y = qsec) +
+  geom_point() +
+  facet_grid(cyl ~ vs)
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-39-1.png" width="90%" /&gt;
+]
+]]
+
+---
+
+# Controler les échelles
+
++ `scales = "fixed` : échelles fixes pour tous les graphiques
+
++ `scales = "free_x` : abscisses libres, ordonnées fixes
+
++ `scales = "free_y` : abscisses fixes, ordonnées libres
+
++ `scales = "free` : échelles libres pour tous les graphiques
+
+---
+class: inverse, middle, center
+
+# Annotation
+
+---
+class: wider
+
+### `annotate()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom")
+  annotate("text", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6)
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-41-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `annotate()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  annotate("label", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6)
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-43-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `annotate()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Sepal.Width, y = Sepal.Length,
+      color = Species) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(legend.position = "bottom") +
+  annotate("label", x = 4, y = 4.2, 
+           label = "Mon texte ici", size = 6,
+           color = "white", fill = "red")
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-45-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: inverse, middle, center
+
+# Couleurs &amp; légendes
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+
+```r
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark()
+```
+
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-47-1.png" width="90%" /&gt;
+]
+]]
+
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_discrete(name = "Nom choisit")
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-49-1.png" width="90%" /&gt;
+]
+]]
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_manual(values = c("yellow", "orange", "red"))
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-51-1.png" width="90%" /&gt;
+]
+]]
+
+
+---
+class: wider
+
+### `scale_*()`
+
+.grid-container[.row[
+.col-6[
+.small[
+
+```r
+ggplot(iris) +
+  aes(x = Species, y = Sepal.Length) +
+  geom_boxplot(aes(fill = Species), color = "white") +
+  theme_dark() +
+  scale_fill_viridis_d()
+```
+]
+]
+.col-6[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-53-1.png" width="90%" /&gt;
+]
+]]
+
+.footnote[
+&lt;sup&gt;*&lt;/sup&gt;[https://rtask.thinkr.fr/fr/ggplot2-welcome-viridis/](https://rtask.thinkr.fr/fr/ggplot2-welcome-viridis/)
+]
+
+---
+class: inverse, middle, center
+
+# Extensions
+
+---
+class: center, middle
+
+# R graph gallery
+
+[https://www.r-graph-gallery.com/](https://www.r-graph-gallery.com/)
+
+---
+class: center, middle
+
+# ggplot2 extensions gallery
+
+[https://www.ggplot2-exts.org/gallery/](https://www.ggplot2-exts.org/gallery/)
+
+---
+class: inverse
+
+# Exercice 1
+
+À partir de _tidywoo_, faire différents graphiques pour prendre ne main ggplot2
+
+---
+class: inverse
+
+# Exercice 2
+
+À partir du jeu de données _solubility.csv_
+
+.center[
+&lt;img src="ggplot2_files/figure-html/unnamed-chunk-54-1.png" width="80%" /&gt;
+]
+
+
+---
+class: inverse, wider
+
+# Correcion exercice 2
+
+
+
+```r
+# Importation
+dataset &lt;- read_delim(here::here("static/data/solubility.csv"), ";")
+# manipulation
+dataset %&gt;%  
+  pivot_longer(MolWeight:SurfaceArea2, names_to = "caract", 
+               values_to = "value") %&gt;% 
+  # Graphique
+  ggplot() +
+  aes(x = value, y = solubility) +
+  geom_point(color = "grey") +
+  facet_wrap(~caract, ncol = 5, scales = "free_x") +
+  geom_smooth(aes(color = caract), show.legend = FALSE, method = "lm") +
+  theme_bw() +
+  theme(strip.background = element_rect(fill = "black"),
+        strip.text = element_text(color = "white", face = "bold"),
+        axis.title = element_text(size = 12, face = "bold")) +
+  scale_color_viridis_d(option = "D") +
+  labs(y = "Solubilité", x = "Valeurs des caractéristiques moléculaires")
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "agate",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
