@@ -37,7 +37,7 @@ class: inverse, center, middle
 
 # Importation avec <img src="../static/img/readr.svg" width="7%">
 
-#### <i class="fas fa-arrow-circle-right"></i> `read_delim()`
+#### <i class="fas fa-arrow-circle-right"></i> `read_delim()` (baseR : `read.delim()` ou `read.table()`)
 
 ```{r eval = FALSE}
 read_delim(file = "chemin/vers/fichier.csv", delim = ";", 
@@ -48,9 +48,9 @@ read_delim(file = "chemin/vers/fichier.csv", delim = ";",
 
 #### <i class="fas fa-arrow-circle-right"></i> Autres fonctions avec des valeurs fixes pour `delim`
 
-+ `read_csv` pour `delim = ","`
++ `read_csv` pour `delim = ","` (base R : `read.csv()`)
 
-+ `read_csv2` pour `delim = ";"`
++ `read_csv2` pour `delim = ";"` (base R : `read.csv2()`)
 
 + `read_tsv` pour `delim = "\t"` (tabulation)
 
@@ -119,6 +119,34 @@ read_excel(path = "chemin/vers/fichier.xls", sheet = NULL,
 # Pour plus d'information
 ?read_excel
 ```
+---
+class: inverse, center, middle
+
+# Shapefiles (.shp & co), geopackage (.gpkg)
+
+<img src="../static/img/sf.gif" width="30%">
+
+---
+
+# Importation avec <img src="../static/img/sf.gif" width="7%">
+
+#### <i class="fas fa-arrow-circle-right"></i> `st_read()`
+
+```{r eval = FALSE}
+read_excel(dsn = "chemin/vers/fichier.shp")
+read_excel(dsn = "chemin/vers/fichier.gpkg")
+```
+
++ `geometry_column` : nom de la colonne des coordonnées (si plusieurs)
+
+
+
+#### <i class="fas fa-arrow-circle-right"></i> Attention !
+
++ Pour les shapefiles, le fichier .shx au moins doit être présent mais il est recommandé d'avoir tous les autres (.prj, .dat, fichier de données)
+
++ Fonctions utiles : `st_zm()`, `st_transform()`
+
 
 ---
 class: inverse, center, middle

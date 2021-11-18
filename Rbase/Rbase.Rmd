@@ -118,6 +118,17 @@ library(nom_du_package)
   + __Github__ : [https://github.com/](https://github.com/)
 
 ---
+class: inverse
+
+# Exercices
+
++ Installer le package `cowplot`
+
++ Charger le package `cowplot`, regarder l'aide de la fonction `plot_grid` et essayer quelques exemples
+
++ Dans la console, essayer quelques opérations de base
+
+---
 class: inverse, center, middle
 
 # Structure des données
@@ -211,7 +222,7 @@ Fonctions utiles : `dim()`, `nrow()`, `ncol()`, `rownames()`, `colnames()`
 #### Sous-ensemble
 
 ```{r results = "hold"}
-m1[1,] #1ere colonne
+m1[1,] #1ere ligne
 m1[,2] #2eme colonne
 m1[1,2] #valeur de la 1ere ligne et 2eme colonne
 ```
@@ -226,8 +237,7 @@ m1[1,2] #valeur de la 1ere ligne et 2eme colonne
 
 ```{r}
 df <- data.frame(x = 1:3, 
-                 y = c("a", "b", "c"), 
-                 stringsAsFactors = FALSE)
+                 y = c("a", "b", "c"))
 ```
 
 Fonctions utiles : `dim()`, `nrow()`, `ncol()`, `rownames()`, `colnames()`, `cbind()`, `rbind()`
@@ -250,21 +260,13 @@ class: inverse
 
 # Exercices
 
-+ Installer le package `cowplot`
-
-+ Charger le package `cowplot`, regarder l'aide de la fonction `plot_grid` et essayer quelques exemples
-
-+ Dans la console, essayer quelques opérations de base
-
 + Dans un script : 
 
   + Créer 3 vecteurs (atomiques) : 1 numérique, 1 logique et 1 caractère
   
   + Faire différentes combinaisons des vecteurs 2 à 2 avec `c()` et observer le résultat. Que se passe t-il ?
   
-  + À partir de ces vecteurs, créer une liste puis créer un data.frame
-  
-  + Donner comme nom au data.frame : _vecteur1_ (numérique), _vecteur2_ (logique), _vecteur3_ (caractère)
+  + À partir de ces vecteurs, créer une liste puis créer un data.frame dont les noms des colonnes sont : _vecteur1_ (numérique), _vecteur2_ (logique), _vecteur3_ (caractère)
   
   + Appliquer la fonction `mean()` à chaque colonne du data.frame. Que se passe t-il ?
 
@@ -354,7 +356,24 @@ print("ok")
 ```
 
 .footnote[
-<sup>*</sup>Les boucles `for` que l'on trouve dans d'autres langages sont à éviter (et peuvent souvent l'être) dans R  !
+<sup>*</sup>Les boucles `while` ont une utilisation bien spécifique  !
+]
+
+---
+
+# Boucles<sup>*</sup> `for`
+
++ Applique du code sur tous les éléments d'un objet donné
+
+```{r results = "hold"}
+for (i in 1:5) {
+  cat("Le chiffre est i est égale à", i, "\n")
+}
+print("Boucle terminée")
+```
+
+.footnote[
+<sup>*</sup>Les boucles `for` et sont à éviter (et peuvent souvent l'être) dans R  !
 ]
 
 ---
@@ -398,16 +417,15 @@ class: inverse
 
   + renvoie la moyenne et l'écart-type si le vecteur est numérique
   
-  + renvoie les éléments uniques si le vecteur est de type caractère (ou _factor_)
+  + renvoie les éléments uniques si le vecteur est de type caractère ou _factor_
   
   + renvoie la proportion d'élément vraie si le vecteur est de type logique
   
   + renvoie une erreur sinon
   
-
 + Tester la fonction sur les vecteurs précédemment créés
 
-Fonctions utiles : `mean()`, `sd()`, `unique()`, `is.numeric()`, `is.factor()`, `is.character()`, `is.logical()`
+Fonctions utiles : `mean()`, `sd()`, `unique()`, `is.numeric()`, `is.factor()`, `is.character()`, `is.logical()`, `stop()`
 
 ---
 

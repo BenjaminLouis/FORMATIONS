@@ -58,7 +58,7 @@ library(kableExtra)
 
 + _On vient pour le langage, on reste pour la communauté !_
 
-+ $>10000$ packages (ensemble de fonction)
++ $>13000$ packages (ensemble de fonction)
 
 + Couplage : SQL, WinBUGS, QGis, Excel, ...
 ]

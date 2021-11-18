@@ -591,6 +591,7 @@ tibble("x" = c("V1-V2", "V1-V3", "V2-V3"), Estimate = c(2.58, 3.36, 0.78),
 ]
 
 ---
+exclude: true
 class: inverse
 
 # Exercice 1 
@@ -604,10 +605,11 @@ class: inverse
 
 Analyse du fichier _cow.csv_ : mesure de rendement de production laitière par différentes vaches. Les vaches ont reçu soit la ration R1, soit la ration R2 de nourriture et sont à des âges différents (1ère, 2ème, 3ème ou 4ème lactation).
 
-Existe t-il une inlfuence de la ration et/ou de la lactation sur la production de lait ?
+Existe t-il une influence de la ration et/ou de la lactation sur la production de lait ?
 
 
 ---
+exclude: true
 
 # Correction exercice 1
 
@@ -643,7 +645,8 @@ pval <- pf(Fobs, i - 1, n - i, lower.tail = FALSE)
 ]
 
 ---
- 
+exclude: true
+
 # Correction exercice 1
 
 .small[
